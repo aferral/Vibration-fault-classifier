@@ -178,5 +178,5 @@ while dataset.getEpoch() < epochs:
 
 test_acc = test(dataset,sess,accuracy,model_input,target,keep_prob)
 print "Testing set accuracy %f" % (test_acc)
-# saver.save(sess, 'my-model')
+saver.save(sess, 'savedModels/my-model')
 
