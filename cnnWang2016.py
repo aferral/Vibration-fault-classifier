@@ -1,8 +1,6 @@
 import os
 import sys
 import time
-
-
 import numpy as np
 from cnnBlocks import conv_layer, fc_layer, test, validate
 import matplotlib.pyplot as plt
