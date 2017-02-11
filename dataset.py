@@ -20,7 +20,10 @@ class Dataset:
         labels = []
         data = []
 
-        seed = 1
+        seed = 1 #THIS MAKE THAT THE TRAIN VAL TEST REMAIN THE SAME IF YOU RE RUN (random number generator seed)
+        np.random.seed(seed=seed)
+
+
         #Here open files in folder somehow
         tlabels = [[],[]]
         all = []
@@ -68,11 +71,11 @@ class Dataset:
 
 
         # Normalize data
-        mean = self.train_data.mean(axis=0)
-        std = self.train_data.std(axis=0)
-        self.train_data = np.array([   (im-mean)/std for im in self.train_data])
-        self.validation_data = np.array([   (im-mean)/std for im in self.validation_data])
-        self.test_data =  np.array([   (im-mean)/std for im in self.test_data])
+        self.mean = self.train_data.mean(axis=0)
+        self.std = self.train_data.std(axis=0)
+        self.train_data = np.array([   (im-self.mean)/self.std for im in self.train_data])
+        self.validation_data = np.array([   (im-self.mean)/self.std for im in self.validation_data])
+        self.test_data =  np.array([   (im-self.mean)/self.std for im in self.test_data])
 
 
 
@@ -95,6 +98,9 @@ class Dataset:
         self.n_batches = len(self.train_labels) // self.batch_size
         self.current_batch = 0
         self.current_epoch = 0
+
+    def normalizeImage(self,image):
+        return (image-self.mean)/self.std
 
     def nextBatch(self):
         ''' Returns a tuple with batch and batch index '''
