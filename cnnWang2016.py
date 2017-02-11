@@ -4,7 +4,7 @@ import time
 
 
 import numpy as np
-from bloques import conv_layer, fc_layer, test, validate
+from cnnBlocks import conv_layer, fc_layer, test, validate
 import matplotlib.pyplot as plt
 import tensorflow as tf
 
