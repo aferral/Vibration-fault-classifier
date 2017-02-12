@@ -1,0 +1,4 @@
+data in the folder is _0 for fault data, _1 for baseline data
+
+60 images for fault data Label 0
+120 images for baseline Label 1

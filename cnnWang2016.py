@@ -14,8 +14,8 @@ config = tf.ConfigProto()
 sess = tf.InteractiveSession(config=config)
 
 # Load dataset
-dataset = Dataset("data/mix",batch_size=20)
-SUMMARIES_DIR = 'summaries/testModel'
+dataset = Dataset("data/Scalograms",batch_size=5)
+SUMMARIES_DIR = 'summaries/testModelWavelet'
 
 """
 La arquitectura es 1x32x32-64C3-64P2-64C4-
@@ -153,7 +153,7 @@ while dataset.getEpoch() < epochs:
                  })
     step = batch_idx + epoch * n_batches
     # Write training summary
-    if step % 50 == 0:
+    if step % 4 == 0:
         summary = sess.run((merged),
                            feed_dict={
                                model_input: batch_data,
@@ -178,5 +178,5 @@ while dataset.getEpoch() < epochs:
 
 test_acc = test(dataset,sess,accuracy,model_input,target,keep_prob)
 print "Testing set accuracy %f" % (test_acc)
-saver.save(sess, 'savedModels/my-model')
+saver.save(sess, 'savedModels/my-modelWavelet')
 

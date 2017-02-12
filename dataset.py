@@ -77,6 +77,10 @@ class Dataset:
         self.validation_data = np.array([   (im-self.mean)/self.std for im in self.validation_data])
         self.test_data =  np.array([   (im-self.mean)/self.std for im in self.test_data])
 
+        #If we find image with no variation std = 0 and the data will have mean / 0 = nan. Replace nan with zero
+        self.train_data = np.nan_to_num(self.train_data)
+        self.validation_data = np.nan_to_num(self.validation_data)
+        self.test_data = np.nan_to_num(self.test_data)
 
 
         # Augment training dataset (horizontal flipping)
@@ -100,13 +104,14 @@ class Dataset:
         self.current_epoch = 0
 
     def normalizeImage(self,image):
-        return (image-self.mean)/self.std
+        val = (image-self.mean)/self.std
+        return np.nan_to_num(val)
 
     def nextBatch(self):
         ''' Returns a tuple with batch and batch index '''
         start_idx = self.current_batch * self.batch_size
         end_idx = start_idx + self.batch_size
-        batch_data = self.train_data[start_idx:end_idx].reshape((20,96,96,1))
+        batch_data = self.train_data[start_idx:end_idx].reshape((self.batch_size,96,96,1))
         batch_labels = self.train_labels[start_idx:end_idx]
         batch_idx = self.current_batch
 
@@ -127,7 +132,7 @@ class Dataset:
             for i in range(max(1,len(data) // self.batch_size)):
                 start_idx = i * self.batch_size
                 end_idx = start_idx + self.batch_size
-                nElem = min(20,data.shape[0])
+                nElem = min(self.batch_size,data.shape[0])
                 batch_data = data[start_idx:end_idx].reshape((nElem,96,96,1))
                 batch_labels = labels[start_idx:end_idx]
                 batches.append((batch_data, batch_labels))
