@@ -56,6 +56,7 @@ class Dataset:
         test_labels = test_labels[sf]
 
         #separar trainVal -  test
+        
         # tvdata,test_data,tv_labs,test_labels = train_test_split(data,labels, test_size=testProp,random_state=seed)
 
         #separar trainVal en val - train
