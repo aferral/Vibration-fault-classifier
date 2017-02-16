@@ -13,7 +13,7 @@ def labels_to_one_hot(labels):
 
 #Todo crear indice y dar batch en demand nomas
 class Dataset:
-    def __init__(self,dataFolder, batch_size=100,testProp=0.3, validation_proportion=0.1):
+    def __init__(self,dataFolder, batch_size=100,testProp=0.5, validation_proportion=0.1):
         # Training set 181 datos
         # 30 Clase 1 Train, 30 Clase 1 Test. 60 Clase 0 Train, 60 clase 0 Test
         #140      41
@@ -24,40 +24,49 @@ class Dataset:
         np.random.seed(seed=seed)
 
 
+
+
         #Here open files in folder somehow
         tlabels = [[],[]]
         all = []
         allL = []
-        for ind,f in enumerate(os.listdir(dataFolder)):
+        fileList = enumerate(os.listdir(dataFolder))
+
+        #Read all the images and labels
+        for ind,f in fileList:
             ray_image = cv2.cvtColor(cv2.imread(os.path.join(dataFolder,f)), cv2.COLOR_BGR2GRAY)
             label = int(f.split("_")[1][0])
             tlabels[label].append(ind)
             all.append(ray_image)
             allL.append(label)
-
-        orderA = np.random.permutation(60)
-        orderB = np.random.permutation(120)
-        tlabels[0] = np.array(tlabels[0])
-        tlabels[1] = np.array(tlabels[1])
         all = np.array(all)
         allL = np.array(allL)
+        #split trainVal -  test
 
 
-        tvdata = all[np.array(list(tlabels[0][orderA[:30]]) + list(tlabels[1][orderB[:60]]))]
-        tv_labs = np.array([0 for i in range(30)] + [1 for i in range(60)])
-        sf = np.random.permutation(90)
-        tvdata = tvdata[sf]
-        tv_labs = tv_labs[sf]
+        #Here i try to get test and trainVal set with the same distribution as the full dataset (i will not use it for the moment)
 
-        test_data = all[np.array(list(tlabels[0][orderA[30:]]) + list(tlabels[1][orderB[60:]])) ]
-        test_labels = np.array([0 for i in range(30)] + [1 for i in range(60)])
-        sf = np.random.permutation(90)
-        test_data = test_data[sf]
-        test_labels = test_labels[sf]
+        # orderA = np.random.permutation(60)
+        # orderB = np.random.permutation(120)
+        # tlabels[0] = np.array(tlabels[0])
+        # tlabels[1] = np.array(tlabels[1])
 
-        #separar trainVal -  test
-        
-        # tvdata,test_data,tv_labs,test_labels = train_test_split(data,labels, test_size=testProp,random_state=seed)
+        #
+        #
+        # tvdata = all[np.array(list(tlabels[0][orderA[:30]]) + list(tlabels[1][orderB[:60]]))]
+        # tv_labs = np.array([0 for i in range(30)] + [1 for i in range(60)])
+        # sf = np.random.permutation(90)
+        # tvdata = tvdata[sf]
+        # tv_labs = tv_labs[sf]
+        #
+        # test_data = all[np.array(list(tlabels[0][orderA[30:]]) + list(tlabels[1][orderB[60:]])) ]
+        # test_labels = np.array([0 for i in range(30)] + [1 for i in range(60)])
+        # sf = np.random.permutation(90)
+        # test_data = test_data[sf]
+        # test_labels = test_labels[sf]
+
+
+        tvdata,test_data,tv_labs,test_labels = train_test_split(all,allL, test_size=testProp,random_state=seed)
 
         #separar trainVal en val - train
         assert validation_proportion > 0. and validation_proportion < 1.

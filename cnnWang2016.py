@@ -15,7 +15,7 @@ sess = tf.InteractiveSession(config=config)
 
 # Load dataset
 dataset = Dataset("data/Scalograms",batch_size=5)
-SUMMARIES_DIR = 'summaries/testModelWavelet'
+SUMMARIES_DIR = 'summaries/Scalograms'
 
 """
 La arquitectura es 1x32x32-64C3-64P2-64C4-
@@ -173,10 +173,13 @@ while dataset.getEpoch() < epochs:
         validation_writer.add_summary(summary, step)
         print "Validation accuracy %f" % (validation_accuracy)
         print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
+        if validation_accuracy == 1.0:
+            print "Validation accuracy 1.0 stoping"
+            break
 
 #--END TRAINING test accuracy
 
 test_acc = test(dataset,sess,accuracy,model_input,target,keep_prob)
 print "Testing set accuracy %f" % (test_acc)
-saver.save(sess, 'savedModels/my-modelWavelet')
+saver.save(sess, 'savedModels/ScalogramsModel')
 
