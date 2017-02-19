@@ -22,7 +22,6 @@ outModelFolder= 'savedModels/BaselineOuterInner'
 
 #---------------------Parameters---------------------
 
-
 config = tf.ConfigProto()
 # config.gpu_options.per_process_gpu_memory_fraction = 0.4
 sess = tf.InteractiveSession(config=config)
