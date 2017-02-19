@@ -9,34 +9,60 @@ import tensorflow as tf
 #basado en https://github.com/ignacioreyes/convnet-tutorial/blob/master/convnet-tutorial.ipynb
 from dataset import Dataset
 
+#---------------------Parameters---------------------
+
+dataFolder = "data/BaselineOuterInner"
+batchsize = 5
+SUMMARIES_DIR = 'summaries/BaselineOuterInner'
+learning_rate = 1e-4
+outModelFolder= 'savedModels/BaselineOuterInner'
+
+#Note the number of classes will be automatically detected from the dataset (it will check the set of image names
+# name_0, name_1 ,name_2 etc )
+
+#---------------------Parameters---------------------
+
+
 config = tf.ConfigProto()
 # config.gpu_options.per_process_gpu_memory_fraction = 0.4
 sess = tf.InteractiveSession(config=config)
 
 # Load dataset
-dataset = Dataset("data/Scalograms",batch_size=5)
-SUMMARIES_DIR = 'summaries/Scalograms'
+dataset = Dataset(dataFolder,batch_size=batchsize)
+
 
 """
-La arquitectura es 1x32x32-64C3-64P2-64C4-
+Architecture summary (this is the original architecture. The one in this file is a little different)
+
+1x32x32-64C3-64P2-64C4-
 64P2-128C3-128P2-512N-6N in CNN.
-Input de images de 32x32
 
-Conv 1 tiene filtros de 3x3 con 64 features
-pooling (asumo max) 2x2
+Input image 32x32
 
-Conv 2 tiene filtros 4x4 con 64 features
-pooling max de 2x2
+Conv 1 filter size 3x3 with 64 features -- pooling (max??? doesnt say) 2x2
 
-Conv 3 tiene 128 3x3 filtros
-pooling max de 2x2
+Conv 2 filter size 4x4 with 64 features -- pooling (max??? doesnt say) 2x2
 
-Fc de 512
+Conv 3 filter size 3x3 with 128 features -- pooling (max??? doesnt say) 2x2
 
-Salida de 6
+---Flatten conv 3 to use as input for FC layer (fully connected)
 
-Con relu + dropout en FC.
-Mini batch 50 - learning rate de 0.01.
+Fc 512 hiden units
+
+Output layer FC 6 units (6 units for 6 different classes)
+
+The FC layers have relu. The Fc layers have dropout.
+Mini batch 50 - learning rate  0.01.
+
+Changes in this file
+
+-The input is 96x96
+-Using max pooling and relu in conv layers
+-Softmax in output layer (in the paper doesnt mention or is vague)
+-Learning rate is dinamic (fixed in the paper) using adam with lr 0.0001 initial
+-Batches is a parameter but i used 5 for the test
+-The classes are 2-3 for the moment (6 in the paper)
+
 """
 
 # Model parameters
@@ -45,7 +71,7 @@ model_input = tf.placeholder(tf.float32, name='model_input')
 keep_prob = tf.placeholder(tf.float32, name='dropout_prob')
 target = tf.placeholder(tf.float32, name='target')
 
-#For visualization of images in first batch
+#For visualization of images in first batch (this is just visualization)
 tf.image_summary('input', model_input, 10)
 
 
@@ -92,8 +118,10 @@ fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
 # fc2 to output
 layer_name = 'fc2'
+Nclasses = dataset.getNclasses()
+
 with tf.variable_scope(layer_name):
-    fc2_out = fc_layer(fc1_out_drop, [512, 2], layer_name)
+    fc2_out = fc_layer(fc1_out_drop, [512, Nclasses], layer_name)
 
 #Salida con softmax + cross entropy
 with tf.name_scope('loss_function'):
@@ -104,7 +132,7 @@ with tf.name_scope('loss_function'):
 
 # Optimization made with ADAM algorithm
 with tf.name_scope('optimizer'):
-    optimizer = tf.train.AdamOptimizer(1e-4)
+    optimizer = tf.train.AdamOptimizer(learning_rate)
     grads_vars = optimizer.compute_gradients(cross_entropy)
     optimizer.apply_gradients(grads_vars)
     train_step = optimizer.minimize(cross_entropy)
@@ -128,10 +156,6 @@ train_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/train',
                                       sess.graph)
 validation_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/validation')
 sess.run(tf.initialize_all_variables())
-print "Trainable variables"
-for n in tf.trainable_variables():
-    print n.name
-
 
 
 #--START TRAIN
@@ -181,5 +205,5 @@ while dataset.getEpoch() < epochs:
 
 test_acc = test(dataset,sess,accuracy,model_input,target,keep_prob)
 print "Testing set accuracy %f" % (test_acc)
-saver.save(sess, 'savedModels/ScalogramsModel')
+saver.save(sess, outModelFolder)
 
