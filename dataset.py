@@ -1,6 +1,7 @@
 import os
-import cv2
 import numpy as np
+from skimage.color import rgb2gray
+import skimage.io as io
 from sklearn.model_selection import train_test_split
 
 
@@ -32,7 +33,7 @@ class Dataset:
 
         #Read all the images and labels
         for ind,f in fileList:
-            ray_image = cv2.cvtColor(cv2.imread(os.path.join(dataFolder,f)), cv2.COLOR_BGR2GRAY)
+            ray_image = rgb2gray(io.imread(os.path.join(dataFolder,f)))
             label = int(f.split("_")[1][0])
             all.append(ray_image)
             allL.append(label)
