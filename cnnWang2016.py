@@ -70,8 +70,6 @@ model_input = tf.placeholder(tf.float32, name='model_input')
 keep_prob = tf.placeholder(tf.float32, name='dropout_prob')
 target = tf.placeholder(tf.float32, name='target')
 
-#For visualization of images in first batch (this is just visualization)
-tf.image_summary('input', model_input, 10)
 
 
 #------------------------------------------MODEL LAYERS
