@@ -4,7 +4,9 @@ from skimage.color import rgb2gray
 import skimage.io as io
 from sklearn.model_selection import train_test_split
 
-
+def grayscaleEq(rgbimage):
+    cof = 1.0/3
+    return rgbimage[:,:,0] * cof + rgbimage[:,:,1] * cof + rgbimage[:,:,2] * cof
 def labels_to_one_hot(labels,n):
     ''' Converts list of integers to numpy 2D array with one-hot encoding'''
     N = len(labels)
@@ -32,13 +34,15 @@ class Dataset:
         allL = []
         fileList = enumerate(os.listdir(dataFolder))
 
+        supImage = ["jpg", 'png']
         #Read all the images and labels
         for ind,f in fileList:
-            ray_image = rgb2gray(io.imread(os.path.join(dataFolder,f)))
-            label = int(f.split("_")[1][0])
-            all.append(ray_image)
-            allL.append(label)
-            self.fileNames.append(f)
+            if f.split('.')[-1] in supImage:
+                ray_image = grayscaleEq(io.imread(os.path.join(dataFolder,f)))
+                label = int(f.split("_")[1][0])
+                all.append(ray_image)
+                allL.append(label)
+                self.fileNames.append(f)
         self.classes = len(set(allL)) #Get how many different classes are in the problem
         all = np.array(all)
         allL = np.array(allL)
@@ -82,13 +86,13 @@ class Dataset:
         self.current_epoch = 0
 
     def getTrainFilename(self,trainIndex):
-        return self.fileNames[trainIndex]
+        return self.fileNames[self.trainInd[trainIndex]]
 
     def getValFilename(self,valIndex):
-        return self.fileNames[valIndex]
+        return self.fileNames[self.valInd[valIndex]]
 
     def getTestFilename(self,testIndex):
-        return self.fileNames[testIndex]
+        return self.fileNames[self.testInd[testIndex]]
 
     def getNclasses(self):
         return self.classes
