@@ -14,15 +14,16 @@ def labels_to_one_hot(labels,n):
 
 #Todo crear indice y dar batch en demand nomas
 class Dataset:
-    def __init__(self,dataFolder, batch_size=100,testProp=0.3, validation_proportion=0.3):
+    def __init__(self,dataFolder, batch_size=100,testProp=0.3, validation_proportion=0.3,seed = 1):
         # Training set 181 datos
         # 30 Clase 1 Train, 30 Clase 1 Test. 60 Clase 0 Train, 60 clase 0 Test
         #140      41
         self.classes = 0
+        self.fileNames = []
         labels = []
         data = []
 
-        seed = 1 #THIS MAKE THAT THE TRAIN VAL TEST REMAIN THE SAME IF YOU RE RUN (random number generator seed)
+        #THIS MAKE THAT THE TRAIN VAL TEST REMAIN THE SAME IF YOU RE RUN (random number generator seed)
         np.random.seed(seed=seed)
 
 
@@ -37,17 +38,18 @@ class Dataset:
             label = int(f.split("_")[1][0])
             all.append(ray_image)
             allL.append(label)
+            self.fileNames.append(f)
         self.classes = len(set(allL)) #Get how many different classes are in the problem
         all = np.array(all)
         allL = np.array(allL)
-
+        indAll = np.arange(all.shape[0]) #Get index to data to asociate filenames with data
 
         #split trainVal -  test
-        tvdata,test_data,tv_labs,test_labels = train_test_split(all,allL, test_size=testProp,random_state=seed)
+        tvdata,test_data,tv_labs,test_labels,indTrainVal,indTest = train_test_split(all,allL,indAll, test_size=testProp,random_state=seed)
 
         #separar trainVal en val - train
         assert validation_proportion > 0. and validation_proportion < 1.
-        tdata, vdata, tlabels, vlabels = train_test_split(tvdata, tv_labs, test_size=validation_proportion, random_state=seed)
+        tdata, vdata, tlabels, vlabels,indTrain,indVal = train_test_split(tvdata, tv_labs,indTrainVal, test_size=validation_proportion, random_state=seed)
 
         self.train_data = tdata
         self.train_labels = labels_to_one_hot(tlabels,self.classes)
@@ -55,6 +57,10 @@ class Dataset:
         self.validation_labels = labels_to_one_hot(vlabels,self.classes)
         self.test_data = test_data
         self.test_labels = labels_to_one_hot(test_labels,self.classes)
+
+        self.trainInd = indTrain
+        self.valInd = indVal
+        self.testInd = indTest
 
 
         # Normalize data
@@ -74,6 +80,15 @@ class Dataset:
         self.n_batches = len(self.train_labels) // self.batch_size
         self.current_batch = 0
         self.current_epoch = 0
+
+    def getTrainFilename(self,trainIndex):
+        return self.fileNames[trainIndex]
+
+    def getValFilename(self,valIndex):
+        return self.fileNames[valIndex]
+
+    def getTestFilename(self,testIndex):
+        return self.fileNames[testIndex]
 
     def getNclasses(self):
         return self.classes
