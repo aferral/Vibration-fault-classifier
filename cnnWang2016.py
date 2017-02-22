@@ -17,6 +17,8 @@ SUMMARIES_DIR = 'summaries/BaselineOuterInner'
 learning_rate = 1e-4
 outModelFolder= 'savedModels/BaselineOuterInner'
 
+summary = False
+
 #Note the number of classes will be automatically detected from the dataset (it will check the set of image names
 # name_0, name_1 ,name_2 etc )
 
@@ -125,7 +127,8 @@ with tf.name_scope('loss_function'):
     cross_entropy = tf.reduce_mean(
         tf.nn.softmax_cross_entropy_with_logits(fc2_out, target,
                                                 name='cross_entropy'))
-    tf.scalar_summary('cross_entropy', cross_entropy)
+    if summary:
+        tf.scalar_summary('cross_entropy', cross_entropy)
 
 # Optimization made with ADAM algorithm
 with tf.name_scope('optimizer'):
@@ -139,7 +142,9 @@ with tf.name_scope('optimizer'):
 correct_prediction = tf.equal(tf.argmax(fc2_out, 1),
                               tf.argmax(target, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='accuracy')
-tf.scalar_summary('accuracy', accuracy)
+
+if summary:
+    tf.scalar_summary('accuracy', accuracy)
 
 
 
@@ -149,9 +154,11 @@ saver = tf.train.Saver()
 
 tf.set_random_seed(1)
 merged = tf.merge_all_summaries()
-train_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/train',
-                                      sess.graph)
-validation_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/validation')
+
+if summary:
+    train_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/train',
+                                          sess.graph)
+    validation_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/validation')
 sess.run(tf.initialize_all_variables())
 
 
@@ -173,15 +180,7 @@ while dataset.getEpoch() < epochs:
                      keep_prob: 0.5
                  })
     step = batch_idx + epoch * n_batches
-    # Write training summary
-    if step % 4 == 0:
-        summary = sess.run((merged),
-                           feed_dict={
-                               model_input: batch_data,
-                               target: batch_labels,
-                               keep_prob: 1.0  # set to 1.0 at inference time
-                           })
-        train_writer.add_summary(summary, step)
+
     if batch_idx == 0:
         loss, acc, grads = sess.run((cross_entropy, accuracy, grads_vars),
                                     feed_dict={
@@ -190,8 +189,8 @@ while dataset.getEpoch() < epochs:
                                         keep_prob: 1.0
                                     })
         print "Epoch %d, training loss %f, accuracy %f" % (epoch, loss, acc)
-        summary, validation_accuracy = validate(dataset,sess,accuracy,merged,model_input,target,keep_prob)
-        validation_writer.add_summary(summary, step)
+        validation_accuracy = validate(dataset,sess,accuracy,model_input,target,keep_prob)
+
         print "Validation accuracy %f" % (validation_accuracy)
         print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
         if validation_accuracy == 1.0:
