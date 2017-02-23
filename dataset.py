@@ -88,7 +88,8 @@ class Dataset:
         self.current_epoch = 0
 
     def classDistribution(self):
-        return "Train set "+str(Counter(self.train_labels))+" test set "+str(Counter(self.test_labels))
+        return "Train set "+str(Counter(np.where(self.train_labels == 1)[1]))+\
+               " test set "+str(Counter(np.where(self.test_labels == 1)[1]))
 
     def getTrainFilename(self,trainIndex):
         return self.fileNames[self.trainInd[trainIndex]]

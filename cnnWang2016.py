@@ -238,5 +238,6 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    runSession(dataFolder, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder)
+    l,y1,y2 = runSession(dataFolder, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder)
+    print "\n".join(l)
     # ---------------------Parameters---------------------
