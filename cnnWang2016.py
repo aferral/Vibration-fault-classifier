@@ -197,7 +197,7 @@ def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder):
                                             keep_prob: 1.0
                                         })
             print "Epoch %d, training loss %f, accuracy %f" % (epoch, loss, acc)
-            outString.append("Epoch , training loss , accuracy "+str (epoch, loss, acc))
+            outString.append("Epoch , training loss , accuracy "+str((epoch, loss, acc)))
             validation_accuracy = validate(dataset,sess,accuracy,model_input,target,keep_prob)
 
             print "Validation accuracy %f" % (validation_accuracy)
