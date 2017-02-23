@@ -69,3 +69,23 @@ def test(dataset,sess,accuracy,mi,t,kp):
         accs.append(acc)
     mean_acc = np.array(accs).mean()
     return mean_acc
+
+def getPredandLabels(dataset,sess,fc,mi,kp):
+    # metrics
+    y_p = tf.argmax(fc, 1)
+
+
+    data=None
+    labels = None
+    batches = dataset.getTestSet(asBatches=True)
+
+    y_pred = []
+    y_true = []
+    for batch in batches:
+        data, labels = batch
+        temp = sess.run(y_p, feed_dict={mi: data, kp: 1.0})
+        for elem in temp:
+            y_pred.append(elem)
+        for elem in labels:
+            y_true.append(elem)
+    return y_pred, y_true

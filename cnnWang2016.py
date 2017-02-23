@@ -2,7 +2,7 @@ import os
 import sys
 import time
 import numpy as np
-from cnnBlocks import conv_layer, fc_layer, test, validate
+from cnnBlocks import conv_layer, fc_layer, test, validate, getPredandLabels
 import matplotlib.pyplot as plt
 import tensorflow as tf
 #basado en https://github.com/ignacioreyes/convnet-tutorial/blob/master/convnet-tutorial.ipynb
@@ -196,14 +196,10 @@ def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder):
     test_acc = test(dataset,sess,accuracy,model_input,target,keep_prob)
     print "Testing set accuracy %f" % (test_acc)
 
-    # metrics
-    y_p = tf.argmax(fc2_out, 1)
 
-    testData,labels = dataset.getTestSet()
-
-    y_pred = sess.run(y_p, feed_dict={model_input: testData, keep_prob: 1.0})
     print "confusion_matrix"
-    print sk.metrics.confusion_matrix(labels, y_pred)
+    ypred,ytrue = getPredandLabels(dataset,sess,fc2_out,model_input,keep_prob)
+    print sk.metrics.confusion_matrix(ytrue, ypred)
 
     saver.save(sess, outModelFolder)
 
