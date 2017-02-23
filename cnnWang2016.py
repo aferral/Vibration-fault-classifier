@@ -199,6 +199,10 @@ def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder):
 
     print "confusion_matrix"
     ypred,ytrue = getPredandLabels(dataset,sess,fc2_out,model_input,keep_prob)
+
+    print ypred[0:10]
+    print ytrue[0:10]
+
     print sk.metrics.confusion_matrix(ytrue, ypred)
 
     saver.save(sess, outModelFolder)
