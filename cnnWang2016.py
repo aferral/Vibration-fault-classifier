@@ -15,7 +15,7 @@ dataFolder = "data/BaselineOuterInner"
 batchsize = 5
 SUMMARIES_DIR = 'summaries/BaselineOuterInner'
 learning_rate = 1e-4
-outModelFolder= 'savedModels/BaselineOuterInner'
+outModelFolder= 'savedModels/BaselineOuterInnerLessData'
 
 summary = False
 
@@ -29,7 +29,9 @@ config = tf.ConfigProto()
 sess = tf.InteractiveSession(config=config)
 
 # Load dataset
-dataset = Dataset(dataFolder,batch_size=batchsize)
+import random
+seed = 100 * random.random()
+dataset = Dataset(dataFolder,batch_size=batchsize,seed=int(seed),testProp=0.95)
 
 
 """
@@ -125,8 +127,7 @@ with tf.variable_scope(layer_name):
 #Salida con softmax + cross entropy
 with tf.name_scope('loss_function'):
     cross_entropy = tf.reduce_mean(
-        tf.nn.softmax_cross_entropy_with_logits(fc2_out, target,
-                                                name='cross_entropy'))
+        tf.nn.softmax_cross_entropy_with_logits(logits=fc2_out, labels=target,name='cross_entropy'))
     if summary:
         tf.scalar_summary('cross_entropy', cross_entropy)
 
@@ -152,8 +153,9 @@ if summary:
 saver = tf.train.Saver()
 
 
-tf.set_random_seed(1)
-merged = tf.merge_all_summaries()
+#tf.set_random_seed(1)
+if summary:
+	merged = tf.merge_all_summaries()
 
 if summary:
     train_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/train',
@@ -195,7 +197,7 @@ while dataset.getEpoch() < epochs:
         print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
         if validation_accuracy == 1.0:
             print "Validation accuracy 1.0 stoping"
-            break
+            #break
 
 #--END TRAINING test accuracy
 
