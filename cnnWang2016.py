@@ -30,8 +30,8 @@ sess = tf.InteractiveSession(config=config)
 
 # Load dataset
 import random
-seed = 100 * random.random()
-dataset = Dataset(dataFolder,batch_size=batchsize,seed=int(seed),testProp=0.95)
+seed = 100 * random.random() 
+dataset = Dataset(dataFolder,batch_size=batchsize,seed=int(seed))
 
 
 """
@@ -196,7 +196,7 @@ while dataset.getEpoch() < epochs:
         print "Validation accuracy %f" % (validation_accuracy)
         print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
         if validation_accuracy == 1.0:
-            print "Validation accuracy 1.0 stoping"
+            print "Validation accuracy 1.0 ?!"
             #break
 
 #--END TRAINING test accuracy
