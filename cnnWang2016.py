@@ -169,7 +169,7 @@ def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder,s
 
 
     #--START TRAIN
-    epochs = 1
+    epochs = 10
 
     outString.append("Epochs to train  " + str(epochs))
     t_i = time.time()
