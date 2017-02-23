@@ -87,5 +87,5 @@ def getPredandLabels(dataset,sess,fc,mi,kp):
         for elem in temp:
             y_pred.append(elem)
         for elem in labels:
-            y_true.append(elem)
+            y_true.append(np.argmax(elem))
     return y_pred, y_true
