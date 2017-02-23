@@ -132,7 +132,7 @@ class Dataset:
                 batches.append((batch_data, batch_labels))
             return batches
         else:
-            return (data, labels)
+            return (data.reshape((data.shape[0],96,96,1)), labels)
 
     def getValidationSet(self, asBatches=False):
         return self.getSample(self.validation_data,self.validation_labels,asBatches)
