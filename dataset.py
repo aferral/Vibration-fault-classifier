@@ -1,4 +1,6 @@
 import os
+from collections import Counter
+
 import numpy as np
 from skimage.color import rgb2gray
 import skimage.io as io
@@ -84,6 +86,9 @@ class Dataset:
         self.n_batches = len(self.train_labels) // self.batch_size
         self.current_batch = 0
         self.current_epoch = 0
+
+    def classDistribution(self):
+        return "Train set "+str(Counter(self.train_labels))+" test set "+str(Counter(self.test_labels))
 
     def getTrainFilename(self,trainIndex):
         return self.fileNames[self.trainInd[trainIndex]]

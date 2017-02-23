@@ -13,7 +13,13 @@ import sklearn as sk
 
 
 def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder):
-    outString = ""
+    outString = []
+
+    outString.append("Using datafolder  "+str(dataFolder))
+    outString.append("Using batchsize  "+str(batchsize))
+    outString.append("Using SUMMARIES_DIR  "+str(SUMMARIES_DIR))
+    outString.append("Using learning_rate  "+str(learning_rate))
+    outString.append("Using outModelFolder  "+str(outModelFolder))
 
 
     config = tf.ConfigProto()
@@ -23,7 +29,13 @@ def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder):
     # Load dataset
     import random
     seed = 100 * random.random()
+
     dataset = Dataset(dataFolder,batch_size=batchsize,seed=int(seed))
+
+    outString.append("Using dataset seed  " + str(seed))
+    outString.append("Class distribution  " + str(dataset.classDistribution()))
+
+
 
 
     """
@@ -158,6 +170,8 @@ def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder):
 
     #--START TRAIN
     epochs = 1
+
+    outString.append("Epochs to train  " + str(epochs))
     t_i = time.time()
     n_batches = dataset.n_batches
 
@@ -183,10 +197,14 @@ def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder):
                                             keep_prob: 1.0
                                         })
             print "Epoch %d, training loss %f, accuracy %f" % (epoch, loss, acc)
+            outString.append("Epoch %d, training loss %f, accuracy %f" % (epoch, loss, acc))
             validation_accuracy = validate(dataset,sess,accuracy,model_input,target,keep_prob)
 
             print "Validation accuracy %f" % (validation_accuracy)
+            outString.append("Validation accuracy %f" % (validation_accuracy) )
             print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
+            outString.append("Time elapsed", (time.time() - t_i) / 60.0, "minutes" )
+
             if validation_accuracy == 1.0:
                 print "Validation accuracy 1.0 ?!"
                 #break
@@ -195,17 +213,14 @@ def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder):
 
     test_acc = test(dataset,sess,accuracy,model_input,target,keep_prob)
     print "Testing set accuracy %f" % (test_acc)
+    outString.append("Testing set accuracy %f" % (test_acc))
 
-
-    print "confusion_matrix"
     ypred,ytrue = getPredandLabels(dataset,sess,fc2_out,model_input,keep_prob)
 
-    print ypred[0:10]
-    print ytrue[0:10]
 
-    print sk.metrics.confusion_matrix(ytrue, ypred)
 
     saver.save(sess, outModelFolder)
+    return outString ,ypred,ytrue
 
 
 
