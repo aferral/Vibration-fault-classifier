@@ -39,7 +39,7 @@ class Dataset:
         for ind,f in fileList:
             if f.split('.')[-1] in supImage:
                 ray_image = grayscaleEq(io.imread(os.path.join(dataFolder,f)))
-                label = int(f.split("_")[1][0])
+                label = int(f.split("_")[1].split('.')[0])
                 all.append(ray_image)
                 allL.append(label)
                 self.fileNames.append(f)
