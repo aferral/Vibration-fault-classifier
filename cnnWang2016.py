@@ -11,11 +11,11 @@ from dataset import Dataset
 
 #---------------------Parameters---------------------
 
-dataFolder = "data/BaselineOuterInner"
+dataFolder = "data/LoadFaultData"
 batchsize = 50
-SUMMARIES_DIR = 'summaries/BaselineOuterInner'
+SUMMARIES_DIR = 'summaries/LoadFaultData'
 learning_rate = 1e-4
-outModelFolder= 'savedModels/BaselineOuterInner'
+outModelFolder= 'savedModels/LoadFaultData'
 
 summary = False
 
