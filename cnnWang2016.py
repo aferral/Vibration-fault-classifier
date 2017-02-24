@@ -12,7 +12,7 @@ import sklearn as sk
 
 
 
-def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder,summary):
+def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder,summary,epochs = 10):
     outString = []
 
     outString.append("Using datafolder  "+str(dataFolder))
@@ -169,7 +169,7 @@ def runSession(dataFolder,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder,s
 
 
     #--START TRAIN
-    epochs = 10
+
 
     outString.append("Epochs to train  " + str(epochs))
     t_i = time.time()
