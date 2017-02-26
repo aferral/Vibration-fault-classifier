@@ -14,7 +14,7 @@ import sklearn as sk
 
 def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder,summary,epochs = 10):
     outString = []
-
+    outString.append("Using ALTERNATIVE ")
     outString.append("Using datafolder  "+str(dataFolder))
     outString.append("Using testSplit  " + str(testSplit))
     outString.append("Using valSplit  " + str(valSplit))
@@ -38,42 +38,6 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     outString.append("Class distribution  " + str(dataset.classDistribution()))
 
 
-
-
-    """
-    Architecture summary (this is the original architecture. The one in this file is a little different)
-
-    1x32x32-64C3-64P2-64C4-
-    64P2-128C3-128P2-512N-6N in CNN.
-
-    Input image 32x32
-
-    Conv 1 filter size 3x3 with 64 features -- pooling (max??? doesnt say) 2x2
-
-    Conv 2 filter size 4x4 with 64 features -- pooling (max??? doesnt say) 2x2
-
-    Conv 3 filter size 3x3 with 128 features -- pooling (max??? doesnt say) 2x2
-
-    ---Flatten conv 3 to use as input for FC layer (fully connected)
-
-    Fc 512 hiden units
-
-    Output layer FC 6 units (6 units for 6 different classes)
-
-    The FC layers have relu. The Fc layers have dropout.
-    Mini batch 50 - learning rate  0.01.
-
-    Changes in this file
-
-    -The input is 96x96
-    -Using max pooling and relu in conv layers
-    -Softmax in output layer (in the paper doesnt mention or is vague)
-    -Learning rate is dinamic (fixed in the paper) using adam with lr 0.0001 initial
-    -Batches is a parameter but i used 5 for the test
-    -The classes are 2-3 for the moment (6 in the paper)
-
-    """
-
     # Model parameters
     #input 50 batch, 96x96 images and 1 channel , shape=[None, 96,96,1]
     model_input = tf.placeholder(tf.float32, name='model_input')
@@ -83,12 +47,10 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
 
     #------------------------------------------MODEL LAYERS
-    hiddenUnits = 512
-    convLayers = 3
+    hiddenUnits = 256
+    convLayers = 2
     imsize = dataset.imageSize
     lastConvOut = int(imsize * (0.5 ** convLayers))
-    lastConFilters = 128
-
 
     # CONV 1
     layer_name = 'conv1'
@@ -108,23 +70,15 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
         pool2_out = tf.nn.max_pool(conv2_out, ksize=[1, 2, 2, 1],
                                    strides=[1, 2, 2, 1], padding='SAME',
                                    name='pool2')
+    #HERE I ASSUME POOLING [1, 2, 2, 1] padding SAME (so it halves in every conv)
 
-    # CONV 3
-    layer_name = 'conv3'
-    with tf.variable_scope(layer_name):
-        conv3_out = conv_layer(pool2_out, [3, 3, 64, lastConFilters], layer_name)
-    # Second pooling layer
-    with tf.name_scope('pool3'):
-        pool3_out = tf.nn.max_pool(conv3_out, ksize=[1, 2, 2, 1],
-                                   strides=[1, 2, 2, 1], padding='SAME',
-                                   name='pool3')
 
-    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOut * lastConvOut * lastConFilters], name='pool3_flat')
 
+    pool2_out_flat = tf.reshape(pool2_out, [-1, lastConvOut * lastConvOut * 64], name='pool2_flat')
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool3_out_flat, [lastConvOut * lastConvOut * lastConFilters, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool2_out_flat, [lastConvOut * lastConvOut * 64, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 

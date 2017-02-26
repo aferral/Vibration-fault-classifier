@@ -24,6 +24,7 @@ class Dataset:
         #140      41
         self.classes = 0
         self.fileNames = []
+        self.imageSize = None
         labels = []
         data = []
 
@@ -41,6 +42,7 @@ class Dataset:
         for ind,f in fileList:
             if f.split('.')[-1] in supImage:
                 ray_image = grayscaleEq(io.imread(os.path.join(dataFolder,f)))
+                self.imageSize = ray_image.shape[0]
                 label = int(f.split("_")[1].split('.')[0])
                 all.append(ray_image)
                 allL.append(label)
@@ -111,7 +113,7 @@ class Dataset:
         ''' Returns a tuple with batch and batch index '''
         start_idx = self.current_batch * self.batch_size
         end_idx = start_idx + self.batch_size
-        batch_data = self.train_data[start_idx:end_idx].reshape((self.batch_size,96,96,1))
+        batch_data = self.train_data[start_idx:end_idx].reshape((self.batch_size,self.imageSize,self.imageSize,1))
         batch_labels = self.train_labels[start_idx:end_idx]
         batch_idx = self.current_batch
 
@@ -133,12 +135,12 @@ class Dataset:
                 start_idx = i * self.batch_size
                 end_idx = start_idx + self.batch_size
                 nElem = min(self.batch_size,data.shape[0])
-                batch_data = data[start_idx:end_idx].reshape((nElem,96,96,1))
+                batch_data = data[start_idx:end_idx].reshape((nElem,self.imageSize,self.imageSize,1))
                 batch_labels = labels[start_idx:end_idx]
                 batches.append((batch_data, batch_labels))
             return batches
         else:
-            return (data.reshape((data.shape[0],96,96,1)), labels)
+            return (data.reshape((data.shape[0],self.imageSize,self.imageSize,1)), labels)
 
     def getValidationSet(self, asBatches=False):
         return self.getSample(self.validation_data,self.validation_labels,asBatches)
