@@ -135,5 +135,5 @@ if __name__ == "__main__":
     fname = "mix"
     run_notebook(note,
                  nb_suffix='-out_%s' % (fname), nb_kwargs=nb_kwargs,
-                 execute_kwargs={"kernel_name": 'python2','timeout' : 100000})
+                 execute_kwargs={"kernel_name": 'python2'})
 
