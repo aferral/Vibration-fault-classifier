@@ -72,15 +72,15 @@ def renameFolderList(nameOut,folderList,labelList,labelNames=None):
 
 if __name__ == "__main__":
 
-    f1b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 Scalograms/1 - Three Baseline Conditions"
-    f2b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 Scalograms/2 - Three Outer Race Fault Conditions"
-    f3b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 Scalograms/3 - Seven More Outer Race Fault Conditions"
-    f4b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 Scalograms/4 - Seven Inner Race Fault Conditions"
+    f1b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 ScalogramsOr/1 - Three Baseline Conditions"
+    f2b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 ScalogramsOr/2 - Three Outer Race Fault Conditions"
+    f3b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 ScalogramsOr/3 - Seven More Outer Race Fault Conditions"
+    f4b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 ScalogramsOr/4 - Seven Inner Race Fault Conditions"
 
-    f1 = [os.path.join(f1b,elem) for elem in sorted(os.listdir(f1b))]
-    f2 = [os.path.join(f2b,elem) for elem in sorted(os.listdir(f2b))]
-    f3 = [os.path.join(f3b,elem) for elem in sorted(os.listdir(f3b))]
-    f4 = [os.path.join(f4b,elem) for elem in sorted(os.listdir(f4b))]
+    f1 = [os.path.join(f1b,elem) for elem in sorted(os.listdir(f1b))] #GET ALL SUB FOLDER
+    f2 = [os.path.join(f2b,elem) for elem in sorted(os.listdir(f2b))] #GET ALL SUB FOLDER
+    f3 = [os.path.join(f3b,elem) for elem in sorted(os.listdir(f3b))] #GET ALL SUB FOLDER
+    f4 = [os.path.join(f4b,elem) for elem in sorted(os.listdir(f4b))] #GET ALL SUB FOLDER
 
     folderL = f1 + f2 + f3 + f4
     labelL = [1,1,1,
