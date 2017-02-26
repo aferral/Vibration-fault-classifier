@@ -72,18 +72,23 @@ def renameFolderList(nameOut,folderList,labelList,labelNames=None):
 
 if __name__ == "__main__":
 
-    folderL = ["/home/andres/Desktop/da/Fan End/12k FE Be Fault Data - 0",
-               "/home/andres/Desktop/da/Fan End/12k FE Be Fault Data - 1",
-               "/home/andres/Desktop/da/Fan End/12k FE Be Fault Data - 2",
-               "/home/andres/Desktop/da/Fan End/12k FE Be Fault Data - 3",
-               "/home/andres/Desktop/da/Fan End/FE Baseline - 0",
-               "/home/andres/Desktop/da/Fan End/FE Baseline - 1",
-               "/home/andres/Desktop/da/Fan End/FE Baseline - 2",
-               "/home/andres/Desktop/da/Fan End/FE Baseline - 3"]
+    f1b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 Scalograms/1 - Three Baseline Conditions"
+    f2b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 Scalograms/2 - Three Outer Race Fault Conditions"
+    f3b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 Scalograms/3 - Seven More Outer Race Fault Conditions"
+    f4b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 Scalograms/4 - Seven Inner Race Fault Conditions"
 
-    labelL = [0,0,0,0,1,1,1,1]
-    lN = {0 : "Fault", 1 : "Baseline"}
+    f1 = [os.path.join(f1b,elem) for elem in sorted(os.listdir(f1b))]
+    f2 = [os.path.join(f2b,elem) for elem in sorted(os.listdir(f2b))]
+    f3 = [os.path.join(f3b,elem) for elem in sorted(os.listdir(f3b))]
+    f4 = [os.path.join(f4b,elem) for elem in sorted(os.listdir(f4b))]
 
-    # OutFolderName, listOfFolderToLabel, CorrespondingLabels, Optional Label names
-    renameFolderList('FanEnd', folderL, labelL, labelNames=lN)
+    folderL = f1 + f2 + f3 + f4
+    labelL = [1,1,1,
+              0,0,0,
+              0,0,0,0,0,0,0,
+              2,2,2,2,2,2,2]
+    lN = {0 : "Outer", 1 : "Baseline",2 : "Inner"}
+
+    #OutFolderName, listOfFolderToLabel, CorrespondingLabels, Optional Label names
+    renameFolderList('MFPT96', folderL, labelL, labelNames=lN)
 
