@@ -236,7 +236,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 if __name__ == "__main__":
     # ---------------------Parameters---------------------
 
-    dataFolder = "data/BaselineOuterInner"
+    dataFolder = "data/MFPT96"
     batchsize = 50
     SUMMARIES_DIR = 'summaries/BaselineOuterInner'
     learning_rate = 1e-4
