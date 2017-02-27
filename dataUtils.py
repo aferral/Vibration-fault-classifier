@@ -78,7 +78,9 @@ def showRandomImages(dataset,toShow=5):
         print "Class ", c
         for j in range(toShow):
             r = random.randint(0, elements[0].shape[0])
+            r = r if r <= elements[0].shape[0] else (elements[0].shape[0]-1)
             ind = elements[0][r]
+
             fileName = dataset.getTrainFilename(ind)
             image = dataX[ind, :,:]
 
