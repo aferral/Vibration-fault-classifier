@@ -154,4 +154,4 @@ class Dataset:
 
 
 if __name__ == '__main__':
-    cifar10 = Dataset("data/BaselineOuterInner",batch_size=20)
+    cifar10 = Dataset("data/CWRbearings",batch_size=20)

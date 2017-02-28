@@ -121,6 +121,8 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     #--START TRAIN
 
 
+
+
     outString.append("Epochs to train  " + str(epochs))
     t_i = time.time()
     n_batches = dataset.n_batches
