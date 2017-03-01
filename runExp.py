@@ -19,6 +19,6 @@ for data in datasets:
         nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 20}
 
         dname = nb_kwargs['dataFolder'].split("/")[1]
-        alt = str(nb_kwargs['alternativeArc'])
-        print "About to execute ",dname," ",alt
-        nbrun.run_notebook(note,timeout=10000000,nb_suffix='-out_%s_%s--'+str(now) % (dname,alt), nb_kwargs=nb_kwargs,execute_kwargs={"kernel_name": 'python2' })
+        alt2 = str(nb_kwargs['alternativeArc'])
+        print "About to execute ",dname," ",alt2
+        nbrun.run_notebook(note,timeout=10000000,nb_suffix='-out_%s_%s--%s' % (dname,str(alt2),str(now)), nb_kwargs=nb_kwargs,execute_kwargs={"kernel_name": 'python2' })
