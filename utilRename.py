@@ -71,11 +71,11 @@ def renameFolderList(nameOut,folderList,labelList,labelNames=None):
 
 
 if __name__ == "__main__":
-
-    f1b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 ScalogramsOr/1 - Three Baseline Conditions"
-    f2b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 ScalogramsOr/2 - Three Outer Race Fault Conditions"
-    f3b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 ScalogramsOr/3 - Seven More Outer Race Fault Conditions"
-    f4b = "/home/andres/Desktop/Untitled Folder/MFPT Data 96x96 ScalogramsOr/4 - Seven Inner Race Fault Conditions"
+    "C:/Users/andres/Desktop/New folder (2)/MFPT Data 32x32 Spectrograms"
+    f1b = "C:/Users/andres/Desktop/New folder (2)/MFPT Data 96x96 Spectrograms/1 - Three Baseline Conditions"
+    f2b = "C:/Users/andres/Desktop/New folder (2)/MFPT Data 96x96 Spectrograms/2 - Three Outer Race Fault Conditions"
+    f3b = "C:/Users/andres/Desktop/New folder (2)/MFPT Data 96x96 Spectrograms/3 - Seven More Outer Race Fault Conditions"
+    f4b = "C:/Users/andres/Desktop/New folder (2)/MFPT Data 96x96 Spectrograms/4 - Seven Inner Fault Conditions"
 
     f1 = [os.path.join(f1b,elem) for elem in sorted(os.listdir(f1b))] #GET ALL SUB FOLDER
     f2 = [os.path.join(f2b,elem) for elem in sorted(os.listdir(f2b))] #GET ALL SUB FOLDER
@@ -90,5 +90,5 @@ if __name__ == "__main__":
     lN = {0 : "Outer", 1 : "Baseline",2 : "Inner"}
 
     #OutFolderName, listOfFolderToLabel, CorrespondingLabels, Optional Label names
-    renameFolderList('MFPT96', folderL, labelL, labelNames=lN)
+    renameFolderList('MFPTFFT96', folderL, labelL, labelNames=lN)
 

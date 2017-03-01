@@ -79,6 +79,9 @@ class Dataset:
         self.test_data =  np.array([   (im-self.mean)/self.std for im in self.test_data])
 
         #If we find image with no variation std = 0 and the data will have mean / 0 = nan. Replace nan with zero
+        zeroStdTrain = np.where(self.std < 1e-10)  #I tried with the scipy zscore but the error in cords [0,73] keep happening (-1 const in Z score of constant value)
+
+        self.train_data[:, zeroStdTrain] = 0
         self.train_data = np.nan_to_num(self.train_data)
         self.validation_data = np.nan_to_num(self.validation_data)
         self.test_data = np.nan_to_num(self.test_data)
