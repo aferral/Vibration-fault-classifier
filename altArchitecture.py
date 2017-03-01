@@ -154,6 +154,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
             print "Validation accuracy %f" % (validation_accuracy)
             outString.append("Validation accuracy " + str(validation_accuracy) )
+            outString.append("Time elapsed" + str(time.time() - t_i ) + " seconds")
             print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
 
             if validation_accuracy == 1.0:
