@@ -186,7 +186,10 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
             if validation_accuracy == 1.0:
                 print "Validation accuracy 1.0 ?!"
                 #break
-
+        if epoch % 3 == 0:
+            entradad = raw_input("Continue ??")
+            if entradad == "no":
+                break
     #--END TRAINING test accuracy
     trainTime = time.time() - t_i
 
