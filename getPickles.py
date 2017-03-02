@@ -74,12 +74,14 @@ for f in listFiles:
 
     #Crea tabla
     with open(os.path.join(folder,f),'rb') as of:
-        [name, accMean, accStd, meancnfm, stdcnfm, meanTrainTime, resultsRaw, resultsPCA] = pickle.load(of)
+        a  = pickle.load(of)
+	print len(a)
+	[name,accMean,accStd,meancnfm,stdcnfm,meanTrainTime,resultsRaw,resultsPCA] = a
 
         listaConfM.append(meancnfm)
         listaConfstd.append(stdcnfm)
 
-        trozos = name.split(" ")
+        trozos = name.split("_")
 
         dataset = trozos[0]
 
@@ -138,8 +140,6 @@ for f in listFiles:
         df.loc[ind] = pd.Series({'Dataset': pcaD, 'Method': "SVM",
                                  'accMean': accmSVM, 'accStd': accstdSVM, 'runtime': None})
         ind += 1
-
-
 
 
 
