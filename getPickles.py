@@ -14,7 +14,7 @@ def plot_confusion_matrix(cm, classes,
     Normalization can be applied by setting `normalize=True`.
     """
     if axis is None:
-        plt.imshow(cm, interpolation='nearest')
+        plt.imshow(cm, interpolation='nearest',vmax=1,vmin=0)
         plt.title(title)
         plt.colorbar()
         tick_marks = np.arange(len(classes))
@@ -38,7 +38,7 @@ def plot_confusion_matrix(cm, classes,
         plt.tight_layout()
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        # plt.show()
+        plt.show()
     else:
         axis.imshow(cm, interpolation='nearest')
         axis.set_title(title)
@@ -59,6 +59,7 @@ def plot_confusion_matrix(cm, classes,
 
         axis.set_ylabel('True label')
         axis.set_xlabel('Predicted label')
+
 
 folder = 'pickledReports'
 outName = 'tabla'
@@ -84,7 +85,7 @@ for f in listFiles:
 
     dataset = trozos[0]
 
-    names.append(dataset)
+    names.append(name)
     metodo = trozos[1]
 
     flatD = dataset+"FLAT"
@@ -146,21 +147,41 @@ for f in listFiles:
 
 clases=['c'+str(i) for i in range(listaConfM[0].shape[0])]
 
-fig,axis = plt.subplots(len(listFiles), 2)
+fig, axis = plt.subplots(len(listFiles), 2)
 for c in range(len(listFiles)):
+
+
     mean = listaConfM[c]
     std = listaConfstd[c]
 
-    if len(listFiles) > 1:
+    if len(listFiles) > 1 and False:
         ax1 = axis[c][0]
         ax2 = axis[c][1]
     else:
         ax1 = axis[0]
         ax2 = axis[1]
+    print names[c]+" Mean"
+    out = ""
+    for row in range(mean.shape[0]):
+        for col in range(mean.shape[1]):
+           out += str(mean[row,col])+"\t"
+        out += '\n'
+    print out.replace(".",",")
+
+    print names[c]+" Std"
+    out = ""
+    for row in range(std.shape[0]):
+        for col in range(std.shape[1]):
+           out += str(std[row,col])+"\t"
+        out += '\n'
+    print out
+
     plot_confusion_matrix(mean,clases,axis=ax1,title=names[c]+" Mean")
     plot_confusion_matrix(std,clases,axis=ax2,title=names[c]+" Std")
 
-outPath = os.path.join(folder,outName)
 
-fig.savefig(outPath+'.png')
-df.to_excel(outPath+'.xls', sheet_name='Sheet1', index=False, engine='xlsxwriter')
+    print "---------------------------------------------------------------"
+
+
+fig.savefig(outName+'.png')
+df.to_excel(outName+'.xls', sheet_name='Sheet1', index=False, engine='xlsxwriter')
