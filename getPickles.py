@@ -71,75 +71,74 @@ listaConfM =[]
 listaConfstd = []
 ind = 0
 for f in listFiles:
-
+    a = [0,0,0,0,0,0,0,0]
     #Crea tabla
     with open(os.path.join(folder,f),'rb') as of:
         a  = pickle.load(of)
-	print len(a)
-	[name,accMean,accStd,meancnfm,stdcnfm,meanTrainTime,resultsRaw,resultsPCA] = a
+    [name,accMean,accStd,meancnfm,stdcnfm,meanTrainTime,resultsRaw,resultsPCA] = a
 
-        listaConfM.append(meancnfm)
-        listaConfstd.append(stdcnfm)
+    listaConfM.append(meancnfm)
+    listaConfstd.append(stdcnfm)
 
-        trozos = name.split("_")
+    trozos = name.split("_")
 
-        dataset = trozos[0]
+    dataset = trozos[0]
 
-        names.append(dataset)
-        metodo = trozos[1]
+    names.append(dataset)
+    metodo = trozos[1]
 
-        flatD = dataset+"FLAT"
-        pcaD = dataset+"PCA"
+    flatD = dataset+"FLAT"
+    pcaD = dataset+"PCA"
 
 
-        df.loc[ind] = pd.Series({'Dataset': dataset, 'Method': metodo,
-                                 'accMean': accMean, 'accStd': accStd,'runtime':meanTrainTime})
-        ind += 1
+    df.loc[ind] = pd.Series({'Dataset': dataset, 'Method': metodo,
+                             'accMean': accMean, 'accStd': accStd,'runtime':meanTrainTime})
+    ind += 1
 
-        #Add results MLP. LSVM, SVM with flat dataset
+    #Add results MLP. LSVM, SVM with flat dataset
 
-        accmMLP = resultsRaw[0][0]
-        accstdMLP = resultsRaw[0][1]
+    accmMLP = resultsRaw[0][0]
+    accstdMLP = resultsRaw[0][1]
 
-        accmLSVM = resultsRaw[1][0]
-        accstdLSVM = resultsRaw[1][1]
+    accmLSVM = resultsRaw[1][0]
+    accstdLSVM = resultsRaw[1][1]
 
-        accmSVM = resultsRaw[2][0]
-        accstdSVM = resultsRaw[2][1]
+    accmSVM = resultsRaw[2][0]
+    accstdSVM = resultsRaw[2][1]
 
-        df.loc[ind] = pd.Series({'Dataset': flatD, 'Method': "MLP",
-                                 'accMean': accmMLP, 'accStd': accstdMLP,'runtime': None})
-        ind += 1
+    df.loc[ind] = pd.Series({'Dataset': flatD, 'Method': "MLP",
+                             'accMean': accmMLP, 'accStd': accstdMLP,'runtime': None})
+    ind += 1
 
-        df.loc[ind] = pd.Series({'Dataset': flatD, 'Method': "LSVM",
-                                 'accMean': accmLSVM, 'accStd': accstdLSVM,'runtime': None})
-        ind += 1
+    df.loc[ind] = pd.Series({'Dataset': flatD, 'Method': "LSVM",
+                             'accMean': accmLSVM, 'accStd': accstdLSVM,'runtime': None})
+    ind += 1
 
-        df.loc[ind] = pd.Series({'Dataset': flatD, 'Method': "SVM",
-                                 'accMean': accmSVM, 'accStd': accstdSVM,'runtime': None})
-        ind += 1
+    df.loc[ind] = pd.Series({'Dataset': flatD, 'Method': "SVM",
+                             'accMean': accmSVM, 'accStd': accstdSVM,'runtime': None})
+    ind += 1
 
-        # Add results MLP. LSVM, SVM with PCA dataset
-        accmMLP = resultsPCA[0][0]
-        accstdMLP = resultsPCA[0][1]
+    # Add results MLP. LSVM, SVM with PCA dataset
+    accmMLP = resultsPCA[0][0]
+    accstdMLP = resultsPCA[0][1]
 
-        accmLSVM = resultsPCA[1][0]
-        accstdLSVM = resultsPCA[1][1]
+    accmLSVM = resultsPCA[1][0]
+    accstdLSVM = resultsPCA[1][1]
 
-        accmSVM = resultsPCA[2][0]
-        accstdSVM = resultsPCA[2][1]
+    accmSVM = resultsPCA[2][0]
+    accstdSVM = resultsPCA[2][1]
 
-        df.loc[ind] = pd.Series({'Dataset': pcaD, 'Method': "MLP",
-                                 'accMean': accmMLP, 'accStd': accstdMLP, 'runtime': None})
-        ind += 1
+    df.loc[ind] = pd.Series({'Dataset': pcaD, 'Method': "MLP",
+                             'accMean': accmMLP, 'accStd': accstdMLP, 'runtime': None})
+    ind += 1
 
-        df.loc[ind] = pd.Series({'Dataset': pcaD, 'Method': "LSVM",
-                                 'accMean': accmLSVM, 'accStd': accstdLSVM, 'runtime': None})
-        ind += 1
+    df.loc[ind] = pd.Series({'Dataset': pcaD, 'Method': "LSVM",
+                             'accMean': accmLSVM, 'accStd': accstdLSVM, 'runtime': None})
+    ind += 1
 
-        df.loc[ind] = pd.Series({'Dataset': pcaD, 'Method': "SVM",
-                                 'accMean': accmSVM, 'accStd': accstdSVM, 'runtime': None})
-        ind += 1
+    df.loc[ind] = pd.Series({'Dataset': pcaD, 'Method': "SVM",
+                             'accMean': accmSVM, 'accStd': accstdSVM, 'runtime': None})
+    ind += 1
 
 
 
