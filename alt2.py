@@ -89,11 +89,11 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                                    name='pool2')
     #HERE I ASSUME POOLING [1, 2, 2, 1] padding SAME (so it halves in every conv)
 
-    pool2_out_flat = tf.reshape(pool2_out, [-1, lastConvOut * lastConvOut * 16], name='pool2_flat')
+    pool2_out_flat = tf.reshape(pool2_out, [-1, lastConvOut * lastConvOut * 32], name='pool2_flat')
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool2_out_flat, [lastConvOut * lastConvOut * 16, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool2_out_flat, [lastConvOut * lastConvOut * 32, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
