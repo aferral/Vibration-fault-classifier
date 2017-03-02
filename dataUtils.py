@@ -65,7 +65,7 @@ def showRandomImages(dataset,toShow=5):
     nClases = dataset.getNclasses()
 
     dataX = dataset.train_data
-    dataY = dataset.train_labels
+    dataY = np.where(dataset.train_labels == 1)[1]
 
     for c in range(nClases):
         elements = np.where(dataY == c)
@@ -247,11 +247,20 @@ def simplemethodsresults(datasetFolder,transform,limitPoints=None):
         resultLinear.append(useLinear(X, y, tX, ty, True))
         resultSVM.append(useSVM(X, y, tX, ty, True))
 
+    meanMLP = np.mean(np.array(resultMLP))
+    stdMLP = np.std(np.array(resultMLP))
+
+    meanLSVM = np.mean(np.array(resultLinear))
+    stdLSVM = np.std(np.array(resultLinear))
+
+    meanSVM = np.mean(np.array(resultSVM))
+    stdSVM = np.std(np.array(resultSVM))
     print "Results: "
-    print "MLP accuracy mean ", np.mean(np.array(resultMLP)), " std ", np.std(np.array(resultMLP))
+    print "MLP accuracy mean ", meanMLP, " std ", stdMLP
     print "Linear SVM accuracy mean ", np.mean(np.array(resultLinear)), " std ", np.std(np.array(resultLinear))
     print "SVM accuracy mean ", np.mean(np.array(resultSVM)), " std ", np.std(np.array(resultSVM))
 
+    return [[meanMLP,stdMLP],[meanLSVM,stdLSVM],[meanSVM,stdSVM]]
 
 def count_number_trainable_params(tf):
     '''

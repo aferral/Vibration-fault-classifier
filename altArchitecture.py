@@ -162,6 +162,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                 #break
 
     #--END TRAINING test accuracy
+    trainTime = time.time() - t_i
 
     test_acc = test(dataset,sess,accuracy,model_input,target,keep_prob)
     print "Testing set accuracy %f" % (test_acc)
@@ -174,7 +175,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     saver.save(sess, outModelFolder)
     sess.close()
     tf.reset_default_graph()
-    return outString ,ypred,ytrue, seed
+    return outString ,ypred,ytrue, seed, trainTime
 
 
 
@@ -192,6 +193,6 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary)
+    l,y1,y2,seed,runTime = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary)
     print "\n".join(l)
     # ---------------------Parameters---------------------
