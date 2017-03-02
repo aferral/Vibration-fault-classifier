@@ -153,6 +153,9 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     t_i = time.time()
     n_batches = dataset.n_batches
 
+    fallas = 0
+    lasVal = 0
+
     while dataset.getEpoch() < epochs:
         epoch = dataset.getEpoch()
         batch, batch_idx = dataset.nextBatch()
@@ -183,13 +186,18 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
             outString.append("Time elapsed" + str(time.time() - t_i ) + " seconds")
             print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
 
+            if validation_accuracy > lasVal:
+                lasVal = validation_accuracy
+                fallas = 0
+            else:
+                fallas +=1
+
             if validation_accuracy == 1.0:
                 print "Validation accuracy 1.0 ?!"
                 #break
-        if epoch % 3 == 0:
-            entradad = raw_input("Continue ??")
-            if entradad == "no":
-                break
+        if fallas == 3 :
+            print "3 iteraciones donde ha fallado me detengo"
+            break
     #--END TRAINING test accuracy
     trainTime = time.time() - t_i
 
@@ -222,6 +230,6 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed,runTime = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary)
+    l,y1,y2,seed,runTime = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=100)
     print "\n".join(l)
     # ---------------------Parameters---------------------
