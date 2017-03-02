@@ -79,7 +79,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # CONV 4
     layer_name = 'conv4'
     with tf.variable_scope(layer_name):
-        conv4_out = conv_layer(conv3_out, [3, 3, 16, 32], layer_name)
+        conv4_out = conv_layer(conv3_out, [3, 3, 32, 32], layer_name)
 
 
     # First pooling layer
