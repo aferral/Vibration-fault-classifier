@@ -48,8 +48,9 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
     #------------------------------------------MODEL LAYERS
     hiddenUnits = 50
-    convLayers = 2
+    convLayers = 3
     imsize = dataset.imageSize
+    lastFilter = 256
     lastConvOut = int(imsize * (0.5 ** convLayers))
 
     # CONV 1
@@ -96,7 +97,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # CONV 4
     layer_name = 'conv6'
     with tf.variable_scope(layer_name):
-        conv6_out = conv_layer(conv5_out, [3, 3, 256, 256], layer_name)
+        conv6_out = conv_layer(conv5_out, [3, 3, 256, lastFilter], layer_name)
 
     # First pooling layer
     with tf.name_scope('pool3'):
@@ -105,11 +106,11 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                                    name='pool3')
     #HERE I ASSUME POOLING [1, 2, 2, 1] padding SAME (so it halves in every conv)
 
-    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOut * lastConvOut * 256], name='pool3_flat')
+    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOut * lastConvOut * lastFilter], name='pool3_flat')
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool3_out_flat, [lastConvOut * lastConvOut * 256, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool3_out_flat, [lastConvOut * lastConvOut * lastFilter, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
