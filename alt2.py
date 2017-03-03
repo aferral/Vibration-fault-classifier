@@ -55,13 +55,13 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # CONV 1
     layer_name = 'conv1'
     with tf.variable_scope(layer_name):
-        conv1_out = conv_layer(model_input, [3, 3, 1, 16], layer_name)
+        conv1_out = conv_layer(model_input, [3, 3, 1, 64], layer_name)
 
 
     # CONV 2
     layer_name = 'conv2'
     with tf.variable_scope(layer_name):
-        conv2_out = conv_layer(conv1_out, [3, 3, 16, 16], layer_name)
+        conv2_out = conv_layer(conv1_out, [3, 3, 64,64], layer_name)
 
 
     # First pooling layer
@@ -73,13 +73,13 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # CONV 3
     layer_name = 'conv3'
     with tf.variable_scope(layer_name):
-        conv3_out = conv_layer(pool1_out, [3, 3, 16, 32], layer_name)
+        conv3_out = conv_layer(pool1_out, [3, 3, 64, 128], layer_name)
 
 
     # CONV 4
     layer_name = 'conv4'
     with tf.variable_scope(layer_name):
-        conv4_out = conv_layer(conv3_out, [3, 3, 32, 32], layer_name)
+        conv4_out = conv_layer(conv3_out, [3, 3, 128, 128], layer_name)
 
 
     # First pooling layer
@@ -87,13 +87,29 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
         pool2_out = tf.nn.max_pool(conv4_out, ksize=[1, 2, 2, 1],
                                    strides=[1, 2, 2, 1], padding='SAME',
                                    name='pool2')
+
+    # CONV 3
+    layer_name = 'conv5'
+    with tf.variable_scope(layer_name):
+        conv5_out = conv_layer(pool2_out, [3, 3, 128, 256], layer_name)
+
+    # CONV 4
+    layer_name = 'conv6'
+    with tf.variable_scope(layer_name):
+        conv6_out = conv_layer(conv5_out, [3, 3, 256, 256], layer_name)
+
+    # First pooling layer
+    with tf.name_scope('pool3'):
+        pool3_out = tf.nn.max_pool(conv6_out, ksize=[1, 2, 2, 1],
+                                   strides=[1, 2, 2, 1], padding='SAME',
+                                   name='pool3')
     #HERE I ASSUME POOLING [1, 2, 2, 1] padding SAME (so it halves in every conv)
 
-    pool2_out_flat = tf.reshape(pool2_out, [-1, lastConvOut * lastConvOut * 32], name='pool2_flat')
+    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOut * lastConvOut * 256], name='pool3_flat')
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool2_out_flat, [lastConvOut * lastConvOut * 32, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool3_out_flat, [lastConvOut * lastConvOut * 256, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
