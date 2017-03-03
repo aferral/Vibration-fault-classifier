@@ -147,19 +147,19 @@ for f in listFiles:
 
 clases=['c'+str(i) for i in range(listaConfM[0].shape[0])]
 
-fig, axis = plt.subplots(len(listFiles), 2)
+# fig, axis = plt.subplots(len(listFiles), 2)
 for c in range(len(listFiles)):
 
 
     mean = listaConfM[c]
     std = listaConfstd[c]
 
-    if len(listFiles) > 1 and False:
-        ax1 = axis[c][0]
-        ax2 = axis[c][1]
-    else:
-        ax1 = axis[0]
-        ax2 = axis[1]
+    # if len(listFiles) > 1 and False:
+    #     ax1 = axis[c][0]
+    #     ax2 = axis[c][1]
+    # else:
+    #     ax1 = axis[0]
+    #     ax2 = axis[1]
     print names[c]+" Mean"
     out = ""
     for row in range(mean.shape[0]):
@@ -168,20 +168,20 @@ for c in range(len(listFiles)):
         out += '\n'
     print out.replace(".",",")
 
-    print names[c]+" Std"
-    out = ""
-    for row in range(std.shape[0]):
-        for col in range(std.shape[1]):
-           out += str(std[row,col])+"\t"
-        out += '\n'
-    print out
+    # print names[c]+" Std"
+    # out = ""
+    # for row in range(std.shape[0]):
+    #     for col in range(std.shape[1]):
+    #        out += str(std[row,col])+"\t"
+    #     out += '\n'
+    # print out
 
-    plot_confusion_matrix(mean,clases,axis=ax1,title=names[c]+" Mean")
-    plot_confusion_matrix(std,clases,axis=ax2,title=names[c]+" Std")
+    # plot_confusion_matrix(mean,clases,axis=ax1,title=names[c]+" Mean")
+    # plot_confusion_matrix(std,clases,axis=ax2,title=names[c]+" Std")
 
 
     print "---------------------------------------------------------------"
-
-
-fig.savefig(outName+'.png')
-df.to_excel(outName+'.xls', sheet_name='Sheet1', index=False, engine='xlsxwriter')
+#
+#
+# fig.savefig(outName+'.png')
+# df.to_excel(outName+'.xls', sheet_name='Sheet1', index=False, engine='xlsxwriter')
