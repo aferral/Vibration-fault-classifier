@@ -129,7 +129,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
     with tf.variable_scope(layer_name):
         fc3_out = fc_layer(fc2_out_drop, [hiddenUnits, Nclasses], layer_name)
-
+    tf.get_variable_scope().reuse_variables()
     regTerm = 0.01*tf.nn.l2_loss(tf.get_variable("fc1/weights", reuse=True))\
               + 0.01*tf.nn.l2_loss(tf.get_variable("fc2/weights", reuse=True))
     #Salida con softmax + cross entropy
