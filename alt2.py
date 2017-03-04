@@ -114,18 +114,26 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
-
-    # fc2 to output
+    # fc2 to fc3
     layer_name = 'fc2'
     Nclasses = dataset.getNclasses()
 
     with tf.variable_scope(layer_name):
-        fc2_out = fc_layer(fc1_out_drop, [hiddenUnits, Nclasses], layer_name)
+        fc2_out = fc_layer(fc1_out_drop, [hiddenUnits, hiddenUnits], layer_name)
+
+    fc2_out_drop = tf.nn.dropout(fc2_out, keep_prob)
+
+    # fc3 to output
+    layer_name = 'fc3'
+    Nclasses = dataset.getNclasses()
+
+    with tf.variable_scope(layer_name):
+        fc3_out = fc_layer(fc2_out_drop, [hiddenUnits, Nclasses], layer_name)
 
     #Salida con softmax + cross entropy
     with tf.name_scope('loss_function'):
         cross_entropy = tf.reduce_mean(
-            tf.nn.softmax_cross_entropy_with_logits(logits=fc2_out, labels=target,name='cross_entropy'))
+            tf.nn.softmax_cross_entropy_with_logits(logits=fc3_out, labels=target,name='cross_entropy'))
         if summary:
             tf.scalar_summary('cross_entropy', cross_entropy)
 
@@ -137,8 +145,10 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
         train_step = optimizer.minimize(cross_entropy)
 
 
+
+
     # Metrics
-    correct_prediction = tf.equal(tf.argmax(fc2_out, 1),
+    correct_prediction = tf.equal(tf.argmax(fc3_out, 1),
                                   tf.argmax(target, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='accuracy')
 
@@ -224,7 +234,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     print "Testing set accuracy %f" % (test_acc)
     outString.append("Testing set accuracy %f" % (test_acc))
 
-    ypred,ytrue = getPredandLabels(dataset,sess,fc2_out,model_input,keep_prob)
+    ypred,ytrue = getPredandLabels(dataset,sess,fc3_out,model_input,keep_prob)
 
 
 
