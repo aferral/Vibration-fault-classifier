@@ -215,6 +215,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
         if fallas == 3 :
             print "3 iteraciones donde ha fallado me detengo"
             break
+
     #--END TRAINING test accuracy
     trainTime = time.time() - t_i
 
