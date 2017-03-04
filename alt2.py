@@ -47,7 +47,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
 
     #------------------------------------------MODEL LAYERS
-    hiddenUnits = 50
+    hiddenUnits = 512
     convLayers = 3
     imsize = dataset.imageSize
     lastFilter = 256
@@ -113,6 +113,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
         fc1_out = fc_layer(pool3_out_flat, [lastConvOut * lastConvOut * lastFilter, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
+
 
     # fc2 to output
     layer_name = 'fc2'
@@ -214,7 +215,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                 #break
         if fallas == 3 :
             print "3 iteraciones donde ha fallado me detengo"
-            break
+            # break
 
     #--END TRAINING test accuracy
     trainTime = time.time() - t_i
@@ -248,6 +249,6 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed,runTime = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=100)
+    l,y1,y2,seed,runTime = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=50)
     print "\n".join(l)
     # ---------------------Parameters---------------------
