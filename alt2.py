@@ -231,7 +231,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
             if validation_accuracy == 1.0:
                 print "Validation accuracy 1.0 ?!"
-                #break
+                break
         if fallas == 3 :
             print "3 iteraciones donde ha fallado me detengo"
             break
