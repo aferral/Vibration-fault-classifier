@@ -123,6 +123,7 @@ def run_notebook(notebook_name, template_path='.', nb_suffix='-out', out_path='.
         html_exporter.template_file = 'basic'
 
         nb_name_output = notebook_name + '%s.html' % nb_suffix
+        print "saving to ",nb_name_output
         with open(nb_name_output,'w+') as f:
             f.write(body)
 
@@ -130,10 +131,11 @@ def run_notebook(notebook_name, template_path='.', nb_suffix='-out', out_path='.
         # display(FileLink(nb_name_output))
 
 if __name__ == "__main__":
+    outReport = 'reports'
     note = "Data analisis"
     nb_kwargs = {'dataFolder': "data/mix"}
     fname = "mix"
     run_notebook(note,
-                 nb_suffix='-out_%s' % (fname), nb_kwargs=nb_kwargs,
+                 nb_suffix='-out_%s' % (fname), nb_kwargs=nb_kwargs,out_path=outReport,
                  execute_kwargs={"kernel_name": 'python2'})
 
