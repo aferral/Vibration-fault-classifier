@@ -123,6 +123,7 @@ def run_notebook(notebook_name, template_path='.', nb_suffix='-out', out_path='.
         html_exporter.template_file = 'basic'
 
         nb_name_output = notebook_name + '%s.html' % nb_suffix
+        nb_name_output = os.path.join(out_path, nb_name_output)
         print "out path ",out_path
         print "saving to ",nb_name_output
         with open(nb_name_output,'w+') as f:
