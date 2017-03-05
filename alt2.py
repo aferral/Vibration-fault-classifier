@@ -234,8 +234,8 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                 print "Validation accuracy 1.0 ?!"
                 # break
         if fallas == 3 :
-            print "3 iteraciones donde ha fallado me detengo"
-            # break
+            print "3 epochs with higher val error EARLY STOP"
+            break
 
     #--END TRAINING test accuracy
     trainTime = time.time() - t_i
