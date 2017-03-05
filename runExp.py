@@ -9,14 +9,16 @@ if not os.path.exists(outReport):
     os.makedirs(outReport)
 
 
-datasets = [
-"CW32Scalograms",
-"CW32Spectrograms",
-"CW96Scalograms",
-"MFPT32Scalograms",
-"MFPT32Spectrograms",
-"MFPT96Scalograms",
-"MFPT96Spectrogram"]
+datasets = ["MFPT32","MFPT96","CWRbearings",'MFPTFFT32','MFPTFFT96']
+
+# dataset =["CW32Scalograms"
+# "CW32Spectrograms",
+# "CW96Scalograms",
+# "MFPT32Scalograms",
+# "MFPT32Spectrograms",
+# "MFPT96Scalograms",
+# "MFPT96Spectrogram"]
+
 
 
 
