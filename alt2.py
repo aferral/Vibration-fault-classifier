@@ -93,7 +93,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # CONV 1
     layer_name = 'conv1'
     with tf.variable_scope(layer_name):
-        conv1_out = conv_layer(model_input, [3, 3, 1, 64], layer_name)
+        conv1_out = conv_layer(model_input, [5, 2, 1, 64], layer_name)
     # First pooling layer
     with tf.name_scope('pool1'):
         pool1_out = tf.nn.max_pool(conv1_out, ksize=[1, 2, 2, 1],
@@ -192,7 +192,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                      feed_dict={
                          model_input: batch_data,
                          target: batch_labels,
-                         keep_prob: 0.3
+                         keep_prob: 0.5
                      })
         step = batch_idx + epoch * n_batches
 
