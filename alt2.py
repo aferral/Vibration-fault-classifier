@@ -204,7 +204,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                      feed_dict={
                          model_input: batch_data,
                          target: batch_labels,
-                         keep_prob: 0.7
+                         keep_prob: 0.3
                      })
         step = batch_idx + epoch * n_batches
 
