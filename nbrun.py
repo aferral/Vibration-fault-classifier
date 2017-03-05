@@ -132,7 +132,7 @@ def run_notebook(notebook_name, template_path='.', nb_suffix='-out', out_path='.
 
 if __name__ == "__main__":
     outReport = 'reports'
-    note = "Data analisis"
+    note = "data Show"
     nb_kwargs = {'dataFolder': "data/mix"}
     fname = "mix"
     run_notebook(note,
