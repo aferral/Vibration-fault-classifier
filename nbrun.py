@@ -132,10 +132,27 @@ def run_notebook(notebook_name, template_path='.', nb_suffix='-out', out_path='.
 
 if __name__ == "__main__":
     outReport = 'reports'
-    note = "dataShow"
-    nb_kwargs = {'dataFolder': "data/mix"}
-    fname = "mix"
-    run_notebook(note,
-                 nb_suffix='-out_%s' % (fname), nb_kwargs=nb_kwargs,out_path=outReport,
-                 execute_kwargs={"kernel_name": 'python2'})
+
+
+    # note = "dataShow"
+    # nb_kwargs = {'dataFolder': "data/mix"}
+    # fname = "mix"
+    # run_notebook(note,
+    #              nb_suffix='-out_%s' % (fname), nb_kwargs=nb_kwargs,out_path=outReport,
+    #              execute_kwargs={"kernel_name": 'python2'})
+
+
+    note = "reportModelResult"
+    dFolder = 'data/mix'
+    alt = 1
+
+    now = time.strftime('-day%Y-%m-%d-time%H-%M')
+    nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs': 1}
+
+    dname = nb_kwargs['dataFolder'].split("/")[1]
+    alt2 = str(nb_kwargs['alternativeArc'])
+    print "About to execute ", dname, " ", alt2
+    run_notebook(note, out_path=outReport, timeout=10000000,
+                       nb_suffix='-out_%s_%s--%s' % (dname, str(alt2), str(now)),
+                       nb_kwargs=nb_kwargs, execute_kwargs={"kernel_name": 'python2'})
 
