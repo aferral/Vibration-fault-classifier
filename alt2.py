@@ -176,7 +176,8 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
 
     #--START TRAIN
-
+    lasVal = 0
+    fallas = 0
 
     outString.append("Epochs to train  " + str(epochs))
     t_i = time.time()
@@ -212,9 +213,18 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
             print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
             outString.append("Time elapsed" + str(time.time() - t_i) + " seconds")
 
+            if validation_accuracy > lasVal:
+                lasVal = validation_accuracy
+                fallas = 0
+            else:
+                fallas += 1
+
             if validation_accuracy == 1.0:
                 print "Validation accuracy 1.0 ?!"
-                #break
+                # break
+        if fallas == 3:
+            print "3 iteraciones donde ha fallado me detengo"
+            break
 
     #--END TRAINING test accuracy
     trainTime = time.time() - t_i
