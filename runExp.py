@@ -8,18 +8,25 @@ outReport = 'reports'
 if not os.path.exists(outReport):
     os.makedirs(outReport)
 
-datasets = ["MFPT32","MFPT96","CWRbearings",'MFPTFFT32','MFPTFFT96']
 
+datasets = [
+"CW32Scalograms",
+"CW32Spectrograms",
+"CW96Scalograms",
+"MFPT32Scalograms",
+"MFPT32Spectrograms",
+"MFPT96Scalograms",
+"MFPT96Spectrogram"]
 
 
 
 for data in datasets:
-    for i in range(2):
+    for i in range(3):
         dFolder = os.path.join('data',data)
-        alt = bool(i)
+        alt = int(i)
 
         now = time.strftime('-day%Y-%m-%d-time%H-%M')
-        nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 20}
+        nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 1}
 
         dname = nb_kwargs['dataFolder'].split("/")[1]
         alt2 = str(nb_kwargs['alternativeArc'])
