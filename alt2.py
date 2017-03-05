@@ -57,13 +57,13 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # CONV 1
     layer_name = 'conv1'
     with tf.variable_scope(layer_name):
-        conv1_out = conv_layer(model_input, [5, 5, 1, 32], layer_name)
+        conv1_out = conv_layer(model_input, [2, 2, 1, 32], layer_name)
 
 
     # CONV 2
     layer_name = 'conv2'
     with tf.variable_scope(layer_name):
-        conv2_out = conv_layer(conv1_out, [5, 5, 32,32], layer_name)
+        conv2_out = conv_layer(conv1_out, [2, 2, 32,32], layer_name)
 
 
     # First pooling layer
@@ -75,13 +75,13 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # CONV 3
     layer_name = 'conv3'
     with tf.variable_scope(layer_name):
-        conv3_out = conv_layer(pool1_out, [5, 5, 32, 64], layer_name)
+        conv3_out = conv_layer(pool1_out, [2, 2, 32, 64], layer_name)
 
 
     # CONV 4
     layer_name = 'conv4'
     with tf.variable_scope(layer_name):
-        conv4_out = conv_layer(conv3_out, [5, 5, 64, 64], layer_name)
+        conv4_out = conv_layer(conv3_out, [2,2, 64, 64], layer_name)
 
 
     # First pooling layer
@@ -93,12 +93,12 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # CONV 3
     layer_name = 'conv5'
     with tf.variable_scope(layer_name):
-        conv5_out = conv_layer(pool2_out, [5, 5, 64, 128], layer_name)
+        conv5_out = conv_layer(pool2_out, [3, 3, 64, 128], layer_name)
 
     # CONV 4
     layer_name = 'conv6'
     with tf.variable_scope(layer_name):
-        conv6_out = conv_layer(conv5_out, [5, 5, 128, lastFilter], layer_name)
+        conv6_out = conv_layer(conv5_out, [3, 3, 128, lastFilter], layer_name)
 
     # First pooling layer
     with tf.name_scope('pool3'):
