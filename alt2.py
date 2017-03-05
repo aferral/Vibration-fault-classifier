@@ -1,3 +1,4 @@
+#5
 import os
 import sys
 import time
@@ -14,7 +15,7 @@ import sklearn as sk
 
 def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder,summary,epochs = 10):
     outString = []
-
+    outString.append("Using ALTERNATIVE22 ")
     outString.append("Using datafolder  "+str(dataFolder))
     outString.append("Using testSplit  " + str(testSplit))
     outString.append("Using valSplit  " + str(valSplit))
@@ -38,42 +39,6 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     outString.append("Class distribution  " + str(dataset.classDistribution()))
 
 
-
-
-    """
-    Architecture summary (this is the original architecture. The one in this file is a little different)
-
-    1x32x32-64C3-64P2-64C4-
-    64P2-128C3-128P2-512N-6N in CNN.
-
-    Input image 32x32
-
-    Conv 1 filter size 3x3 with 64 features -- pooling (max??? doesnt say) 2x2
-
-    Conv 2 filter size 4x4 with 64 features -- pooling (max??? doesnt say) 2x2
-
-    Conv 3 filter size 3x3 with 128 features -- pooling (max??? doesnt say) 2x2
-
-    ---Flatten conv 3 to use as input for FC layer (fully connected)
-
-    Fc 512 hiden units
-
-    Output layer FC 6 units (6 units for 6 different classes)
-
-    The FC layers have relu. The Fc layers have dropout.
-    Mini batch 50 - learning rate  0.01.
-
-    Changes in this file
-
-    -The input is 96x96
-    -Using max pooling and relu in conv layers
-    -Softmax in output layer (in the paper doesnt mention or is vague)
-    -Learning rate is dinamic (fixed in the paper) using adam with lr 0.0001 initial
-    -Batches is a parameter but i used 5 for the test
-    -The classes are 2-3 for the moment (6 in the paper)
-
-    """
-
     # Model parameters
     #input 50 batch, 96x96 images and 1 channel , shape=[None, 96,96,1]
     model_input = tf.placeholder(tf.float32, name='model_input')
@@ -86,59 +51,99 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     hiddenUnits = 512
     convLayers = 3
     imsize = dataset.imageSize
+    lastFilter = 256
     lastConvOut = int(imsize * (0.5 ** convLayers))
-    lastConFilters = 128
-
 
     # CONV 1
     layer_name = 'conv1'
     with tf.variable_scope(layer_name):
-        conv1_out = conv_layer(model_input, [2, 2, 1, 64], layer_name)
-    # First pooling layer
-    with tf.name_scope('pool1'):
-        pool1_out = tf.nn.max_pool(conv1_out, ksize=[1, 2, 2, 1],
-                                   strides=[1, 2, 2, 1], padding='SAME',
-                                   name='pool1')
+        conv1_out = conv_layer(model_input, [3, 3, 1, 64], layer_name)
+
+
     # CONV 2
     layer_name = 'conv2'
     with tf.variable_scope(layer_name):
-        conv2_out = conv_layer(pool1_out, [4, 4, 64, 64], layer_name)
-    # Second pooling layer
-    with tf.name_scope('pool2'):
-        pool2_out = tf.nn.max_pool(conv2_out, ksize=[1, 2, 2, 1],
+        conv2_out = conv_layer(conv1_out, [3, 3, 64,64], layer_name)
+
+
+    # First pooling layer
+    with tf.name_scope('pool1'):
+        pool1_out = tf.nn.max_pool(conv2_out, ksize=[1, 2, 2, 1],
                                    strides=[1, 2, 2, 1], padding='SAME',
-                                   name='pool2')
+                                   name='pool1')
 
     # CONV 3
     layer_name = 'conv3'
     with tf.variable_scope(layer_name):
-        conv3_out = conv_layer(pool2_out, [3, 3, 64, lastConFilters], layer_name)
-    # Second pooling layer
+        conv3_out = conv_layer(pool1_out, [3, 3, 64, 128], layer_name)
+
+
+    # CONV 4
+    layer_name = 'conv4'
+    with tf.variable_scope(layer_name):
+        conv4_out = conv_layer(conv3_out, [3, 3, 128, 128], layer_name)
+
+
+    # First pooling layer
+    with tf.name_scope('pool2'):
+        pool2_out = tf.nn.max_pool(conv4_out, ksize=[1, 2, 2, 1],
+                                   strides=[1, 2, 2, 1], padding='SAME',
+                                   name='pool2')
+
+    # CONV 3
+    layer_name = 'conv5'
+    with tf.variable_scope(layer_name):
+        conv5_out = conv_layer(pool2_out, [3, 3, 128, 256], layer_name)
+
+    # CONV 4
+    layer_name = 'conv6'
+    with tf.variable_scope(layer_name):
+        conv6_out = conv_layer(conv5_out, [3, 3, 256, lastFilter], layer_name)
+
+    # First pooling layer
     with tf.name_scope('pool3'):
-        pool3_out = tf.nn.max_pool(conv3_out, ksize=[1, 2, 2, 1],
+        pool3_out = tf.nn.max_pool(conv6_out, ksize=[1, 2, 2, 1],
                                    strides=[1, 2, 2, 1], padding='SAME',
                                    name='pool3')
+    #HERE I ASSUME POOLING [1, 2, 2, 1] padding SAME (so it halves in every conv)
 
-    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOut * lastConvOut * lastConFilters], name='pool3_flat')
-
+    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOut * lastConvOut * lastFilter], name='pool3_flat')
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool3_out_flat, [lastConvOut * lastConvOut * lastConFilters, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool3_out_flat, [lastConvOut * lastConvOut * lastFilter, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
-    # fc2 to output
+    # fc2 to fc3
     layer_name = 'fc2'
     Nclasses = dataset.getNclasses()
 
     with tf.variable_scope(layer_name):
-        fc2_out = fc_layer(fc1_out_drop, [hiddenUnits, Nclasses], layer_name)
+        fc2_out = fc_layer(fc1_out_drop, [hiddenUnits, hiddenUnits], layer_name)
+
+    fc2_out_drop = tf.nn.dropout(fc2_out, keep_prob)
+
+    # fc3 to output
+    layer_name = 'fc3'
+    Nclasses = dataset.getNclasses()
+
+    with tf.variable_scope(layer_name):
+        fc3_out = fc_layer(fc2_out_drop, [hiddenUnits, Nclasses], layer_name)
+
+
+    with tf.variable_scope("fc1",reuse=True):
+        rg1 = 0.01*tf.nn.l2_loss(tf.get_variable("weights"))
+    with tf.variable_scope("fc2",reuse=True):
+        rg2 = 0.01*tf.nn.l2_loss(tf.get_variable("weights"))
+    with tf.variable_scope("fc3", reuse=True):
+        rg3 = 0.01*tf.nn.l2_loss(tf.get_variable("weights"))
+    regTerm = rg1 + rg2 + rg3
 
     #Salida con softmax + cross entropy
     with tf.name_scope('loss_function'):
         cross_entropy = tf.reduce_mean(
-            tf.nn.softmax_cross_entropy_with_logits(logits=fc2_out, labels=target,name='cross_entropy'))
+            tf.nn.softmax_cross_entropy_with_logits(logits=fc3_out, labels=target,name='cross_entropy') + regTerm)
         if summary:
             tf.scalar_summary('cross_entropy', cross_entropy)
 
@@ -150,8 +155,10 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
         train_step = optimizer.minimize(cross_entropy)
 
 
+
+
     # Metrics
-    correct_prediction = tf.equal(tf.argmax(fc2_out, 1),
+    correct_prediction = tf.equal(tf.argmax(fc3_out, 1),
                                   tf.argmax(target, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32), name='accuracy')
 
@@ -176,12 +183,16 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
 
     #--START TRAIN
-    lasVal = 0
-    fallas = 0
+
+
+
 
     outString.append("Epochs to train  " + str(epochs))
     t_i = time.time()
     n_batches = dataset.n_batches
+
+    fallas = 0
+    lasVal = 0
 
     while dataset.getEpoch() < epochs:
         epoch = dataset.getEpoch()
@@ -193,7 +204,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                      feed_dict={
                          model_input: batch_data,
                          target: batch_labels,
-                         keep_prob: 0.3
+                         keep_prob: 0.7
                      })
         step = batch_idx + epoch * n_batches
 
@@ -210,21 +221,21 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
             print "Validation accuracy %f" % (validation_accuracy)
             outString.append("Validation accuracy " + str(validation_accuracy) )
+            outString.append("Time elapsed" + str(time.time() - t_i ) + " seconds")
             print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
-            outString.append("Time elapsed" + str(time.time() - t_i) + " seconds")
 
             if validation_accuracy > lasVal:
                 lasVal = validation_accuracy
                 fallas = 0
             else:
-                fallas += 1
+                fallas +=1
 
             if validation_accuracy == 1.0:
                 print "Validation accuracy 1.0 ?!"
                 # break
-        if fallas == 3:
+        if fallas == 3 :
             print "3 iteraciones donde ha fallado me detengo"
-            break
+            # break
 
     #--END TRAINING test accuracy
     trainTime = time.time() - t_i
@@ -233,7 +244,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     print "Testing set accuracy %f" % (test_acc)
     outString.append("Testing set accuracy %f" % (test_acc))
 
-    ypred,ytrue = getPredandLabels(dataset,sess,fc2_out,model_input,keep_prob)
+    ypred,ytrue = getPredandLabels(dataset,sess,fc3_out,model_input,keep_prob)
 
 
 
@@ -258,6 +269,6 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed,trainTime = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=20)
+    l,y1,y2,seed,runTime = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=50)
     print "\n".join(l)
     # ---------------------Parameters---------------------
