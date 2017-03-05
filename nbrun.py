@@ -127,7 +127,6 @@ def run_notebook(notebook_name, template_path='.', nb_suffix='-out', out_path='.
         print "saving to ",nb_name_output
         with open(nb_name_output,'w+') as f:
             f.write(body)
-
         # nbformat.write(nb, nb_name_output)
         # display(FileLink(nb_name_output))
 
