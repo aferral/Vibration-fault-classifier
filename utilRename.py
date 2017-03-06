@@ -71,24 +71,23 @@ def renameFolderList(nameOut,folderList,labelList,labelNames=None):
 
 
 if __name__ == "__main__":
-    "C:/Users/andres/Desktop/New folder (2)/MFPT Data 32x32 Spectrograms"
-    f1b = "C:/Users/andres/Desktop/New folder (2)/MFPT Data 96x96 Spectrograms/1 - Three Baseline Conditions"
-    f2b = "C:/Users/andres/Desktop/New folder (2)/MFPT Data 96x96 Spectrograms/2 - Three Outer Race Fault Conditions"
-    f3b = "C:/Users/andres/Desktop/New folder (2)/MFPT Data 96x96 Spectrograms/3 - Seven More Outer Race Fault Conditions"
-    f4b = "C:/Users/andres/Desktop/New folder (2)/MFPT Data 96x96 Spectrograms/4 - Seven Inner Fault Conditions"
+    # "C:/Users/andres/Desktop/New folder (2)/MFPT Data 32x32 Spectrograms"
+    f1b = "C:/Users/andres/Desktop/New folder (4)/Case Western Spectrograms 96x96/BF"
+    f2b = "C:/Users/andres/Desktop/New folder (4)/Case Western Spectrograms 96x96/IR"
+    f3b = "C:/Users/andres/Desktop/New folder (4)/Case Western Spectrograms 96x96/N"
+    f4b = "C:/Users/andres/Desktop/New folder (4)/Case Western Spectrograms 96x96/OR"
 
-    f1 = [os.path.join(f1b,elem) for elem in sorted(os.listdir(f1b))] #GET ALL SUB FOLDER
-    f2 = [os.path.join(f2b,elem) for elem in sorted(os.listdir(f2b))] #GET ALL SUB FOLDER
-    f3 = [os.path.join(f3b,elem) for elem in sorted(os.listdir(f3b))] #GET ALL SUB FOLDER
-    f4 = [os.path.join(f4b,elem) for elem in sorted(os.listdir(f4b))] #GET ALL SUB FOLDER
+    # f1 = [os.path.join(f1b,elem) for elem in sorted(os.listdir(f1b))] #GET ALL SUB FOLDER
+    # f2 = [os.path.join(f2b,elem) for elem in sorted(os.listdir(f2b))] #GET ALL SUB FOLDER
+    # f3 = [os.path.join(f3b,elem) for elem in sorted(os.listdir(f3b))] #GET ALL SUB FOLDER
+    # f4 = [os.path.join(f4b,elem) for elem in sorted(os.listdir(f4b))] #GET ALL SUB FOLDER
+    #
+    # folderL = f1 + f2 + f3 + f4
+    labelL = [0,1,2,3]
+    lN = {0 : "BF", 1 : "IR",2 : "N",3 : "OR"}
 
-    folderL = f1 + f2 + f3 + f4
-    labelL = [1,1,1,
-              0,0,0,
-              0,0,0,0,0,0,0,
-              2,2,2,2,2,2,2]
-    lN = {0 : "Outer", 1 : "Baseline",2 : "Inner"}
+    folderL = [f1b,f2b,f3b,f4b]
 
     #OutFolderName, listOfFolderToLabel, CorrespondingLabels, Optional Label names
-    renameFolderList('MFPTFFT96', folderL, labelL, labelNames=lN)
+    renameFolderList('CW96Spectrograms', folderL, labelL, labelNames=lN)
 
