@@ -15,7 +15,6 @@ datasets =["MFPT96SpectrogramsV2",
 "MFPT32SpectrogramsV2"]
 
 
-
 for data in datasets:
     for i in range(3):
         dFolder = os.path.join('data',data)
