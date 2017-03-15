@@ -11,7 +11,7 @@ if not os.path.exists(outReport):
 
 # datasets = ["MFPT32","MFPT96","CWRbearings",'MFPTFFT32','MFPTFFT96']
 
-datasets =["CWRHHT96"]
+datasets =["CWRHHT32"]
 
 
 for data in datasets:
