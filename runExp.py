@@ -11,7 +11,7 @@ if not os.path.exists(outReport):
 
 # datasets = ["MFPT32","MFPT96","CWRbearings",'MFPTFFT32','MFPTFFT96']
 
-datasets =["MFPT32"]
+datasets =["MFPT32Scalograms"]
 
 
 for data in datasets:
@@ -20,7 +20,7 @@ for data in datasets:
         alt = int(i)
 
         now = time.strftime('-day%Y-%m-%d-time%H-%M')
-        nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 20}
+        nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 3}
 
         dname = nb_kwargs['dataFolder'].split("/")[1]
         alt2 = str(nb_kwargs['alternativeArc'])
