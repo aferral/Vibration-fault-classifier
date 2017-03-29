@@ -121,7 +121,9 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     #--START TRAIN
 
 
-
+    trainLoss = []
+    valLoss = []
+    valAc = []
 
     outString.append("Epochs to train  " + str(epochs))
     t_i = time.time()
@@ -150,10 +152,12 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                                         })
             print "Epoch %d, training loss %f, accuracy %f" % (epoch, loss, acc)
             outString.append("Epoch , training loss , accuracy "+str((epoch, loss, acc)))
-            validation_accuracy = validate(dataset,sess,accuracy,model_input,target,keep_prob)
+            validation_accuracy, lossVal = validate(dataset,sess,accuracy,model_input,target,keep_prob,cross_entropy)
 
             print "Validation accuracy %f" % (validation_accuracy)
             outString.append("Validation accuracy " + str(validation_accuracy) )
+            print "Validation loss %f" % (lossVal)
+            outString.append("Validation lossVal " + str(lossVal) )
             outString.append("Time elapsed" + str(time.time() - t_i ) + " seconds")
             print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
 
@@ -175,7 +179,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     saver.save(sess, outModelFolder)
     sess.close()
     tf.reset_default_graph()
-    return outString ,ypred,ytrue, seed, trainTime
+    return outString ,ypred,ytrue, seed, trainTime, trainLoss, valLoss, valAc
 
 
 
@@ -193,6 +197,6 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed,runTime = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary)
+    l,y1,y2,seed,runTime, trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary)
     print "\n".join(l)
     # ---------------------Parameters---------------------

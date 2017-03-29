@@ -35,9 +35,10 @@ def fc_layer(input_tensor, weights_shape, layer_name, summary=False):
     return tf.nn.relu(mult_out + biases)
 
 # Useful training functions
-def validate(dataset,sess,accuracy,mi,t,kp):
+def validate(dataset,sess,accuracy,mi,t,kp,cross_entropy):
     batches = dataset.getValidationSet(asBatches=True)
     accs = []
+    losses = []
     data=None
     labels = None
     for batch in batches:
@@ -48,9 +49,17 @@ def validate(dataset,sess,accuracy,mi,t,kp):
                            t: labels,
                            kp: 1.0
                        })
+        loss = sess.run((cross_entropy),
+                        feed_dict={
+                            mi: data,
+                            t: labels,
+                            kp: 1.0
+                        })
         accs.append(acc)
+        losses.append(loss)
     mean_acc = np.array(accs).mean()
-    return mean_acc
+    mean_loss = np.array(losses).mean()
+    return mean_acc, mean_loss
 
 
 def test(dataset,sess,accuracy,mi,t,kp):
