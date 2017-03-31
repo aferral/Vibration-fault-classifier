@@ -26,7 +26,7 @@ def fc_layer(input_tensor, weights_shape, layer_name, summary=False):
     weights = tf.get_variable("weights", weights_shape,
                               initializer=tf.contrib.layers.xavier_initializer())
     biases = tf.get_variable("biases", [weights_shape[1]],
-                             initializer=tf.constant_initializer(0.0))
+                             initializer=tf.contrib.layers.xavier_initializer())
 
     if summary:
         tf.histogram_summary(layer_name + "/weights", weights)
