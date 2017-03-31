@@ -296,6 +296,6 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed,runTime, trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=50)
+    l,y1,y2,seed,runTime, trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.5, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=50)
     print "\n".join(l)
     # ---------------------Parameters---------------------
