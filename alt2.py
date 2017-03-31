@@ -234,6 +234,22 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
             valLoss.append(lossVal)
             valAc.append(validation_accuracy)
 
+            if lossVal > 1:
+                print "HIGH VAL LOSS "
+                batches = dataset.getValidationSet(asBatches=True)
+                data = None
+                labels = None
+                for batch in batches:
+                    data, labels = batch
+                    loss = sess.run((fc2_out),
+                                   feed_dict={
+                                       model_input: data,
+                                       target: labels,
+                                       keep_prob: 1.0
+                                   })
+                    print "OUT ",loss
+
+
             if validation_accuracy > lasVal:
                 lasVal = validation_accuracy
                 fallas = 0
@@ -269,11 +285,11 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 if __name__ == "__main__":
     # ---------------------Parameters---------------------
 
-    dataFolder = "data/MFPTFFT32"
+    dataFolder = "data/CW96Scalograms"
     batchsize = 50
-    SUMMARIES_DIR = 'summaries/MFPTFFT32'
+    SUMMARIES_DIR = 'summaries/CW96Scalograms'
     learning_rate = 1e-4
-    outModelFolder = 'savedModels/MFPTFFT32'
+    outModelFolder = 'savedModels/CW96Scalograms'
 
     summary = False
 

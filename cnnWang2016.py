@@ -221,6 +221,9 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
             valLoss.append(lossVal)
             valAc.append(validation_accuracy)
 
+
+
+
             if validation_accuracy == 1.0:
                 print "Validation accuracy 1.0 ?!"
                 #break
