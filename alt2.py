@@ -235,7 +235,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
             valAc.append(validation_accuracy)
 
             if lossVal > 1:
-                print "HIGH VAL LOSS "
+                print "HIGH VAL LOSS ",lossVal
                 batches = dataset.getValidationSet(asBatches=True)
                 data = None
                 labels = None
@@ -248,6 +248,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                                        keep_prob: 1.0
                                    })
                     print "OUT ",loss
+                    break
 
 
             if validation_accuracy > lasVal:
