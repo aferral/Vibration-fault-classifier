@@ -11,10 +11,11 @@ if not os.path.exists(outReport):
 
 # datasets = ["MFPT32","MFPT96","CWRbearings",'MFPTFFT32','MFPTFFT96']
 
-datasets =["MFPT32Scalograms","MFPT32SpectrogramsV2","MFPT96Scalograms","MFPT96SpectrogramsV2",
-           "CW32Scalograms", "CW32Spectrograms", "CW96Scalograms", "CW96Spectrograms",
-           "CWRHHT32", "CWRHHT96", "MFPT_HHT_32", "MFPT_HHT_96"
-           ]
+# datasets =["MFPT32Scalograms","MFPT32SpectrogramsV2","MFPT96Scalograms","MFPT96SpectrogramsV2",
+#            "CW32Scalograms", "CW32Spectrograms", "CW96Scalograms", "CW96Spectrograms",
+#            "CWRHHT32", "CWRHHT96", "MFPT_HHT_32", "MFPT_HHT_96"
+#            ]
+datasets = ['CW96Scalograms']
 
 
 for data in datasets:
@@ -24,7 +25,7 @@ for data in datasets:
     alt = int(i)
 
     now = time.strftime('-day%Y-%m-%d-time%H-%M')
-    nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 20}
+    nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 20, "valSplit" : 0.1}
 
     dname = nb_kwargs['dataFolder'].split("/")[1]
     alt2 = str(nb_kwargs['alternativeArc'])
