@@ -76,7 +76,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
     # Model parameters
     #input 50 batch, 96x96 images and 1 channel , shape=[None, 96,96,1]
-    model_input = tf.placeholder(tf.float32, name='model_input')
+    model_input = tf.placeholder(tf.float32, name='model_input',shape=[None,96,96,1])
     keep_prob = tf.placeholder(tf.float32, name='dropout_prob')
     target = tf.placeholder(tf.float32, name='target')
 
@@ -195,9 +195,10 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     if summary:
         merged = tf.merge_all_summaries()
 
+    train_writer = tf.summary.FileWriter(SUMMARIES_DIR + '/train',
+                                          sess.graph)
     if summary:
-        train_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/train',
-                                              sess.graph)
+
         validation_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/validation')
     sess.run(tf.initialize_all_variables())
 
