@@ -56,7 +56,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # CONV 1
     layer_name = 'conv1'
     with tf.variable_scope(layer_name):
-        conv1_out = conv_layer(model_input, [imsize[0], 3, 1, 32], layer_name)
+        conv1_out = conv_layer(model_input, [imsize[0], 3, 1, 32], layer_name,pad='VALID')
 
 
     # CONV 2
