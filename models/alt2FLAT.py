@@ -112,7 +112,6 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
     lastConvOutX = 1
     lastConvOutY = int(np.ceil( np.ceil(  np.ceil((imsize[1] - 3 + 1) * 0.5)) * 0.5) * 0.5)
-    print "Lx Ly ",lastConvOutY
 
     pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOutX * lastConvOutY * lastFilter], name='pool3_flat')
     # Output layer  conv3 to  fc 1
