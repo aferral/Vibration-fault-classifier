@@ -90,46 +90,68 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     hiddenUnits = 512
     convLayers = 3
     imsize = dataset.getDataShape()
-    lastConvOutX = int(imsize[0] * (0.5 ** convLayers))
-    lastConvOutY = int(imsize[1] * (0.5 ** convLayers))
+    #lastConvOutX = int(imsize[0] * (0.5 ** convLayers)) #CHECK lastConvOut down
+    #lastConvOutY = int(imsize[1] * (0.5 ** convLayers))
     lastConFilters = 128
+
+
+    #Real formula with VALID out_height = ceil(float(in_height - filter_height + 1) / float(strides1))
+    #formula for SAME out_height = ceil(float(in_height) / float(strides1))
 
 
     # CONV 1
     layer_name = 'conv1'
     with tf.variable_scope(layer_name):
-        conv1_out = conv_layer(model_input, [imsize[0], 3, 1, 64], layer_name)
+        conv1_out = conv_layer(model_input, [imsize[0], 3, 1, 64], layer_name,pad='VALID')
+
+    #The output for conv1 h = (imsize[0] - imsize[0] + 1) /1   w = (imsize[1] - 3 + 1) /1
+
+
     # First pooling layer
     with tf.name_scope('pool1'):
         pool1_out = tf.nn.max_pool(conv1_out, ksize=[1, 2, 2, 1],
                                    strides=[1, 2, 2, 1], padding='SAME',
                                    name='pool1')
+    # The output for pool1 h = 1   h = (imsize[1]*0.5 - 1)
+
     # CONV 2
     layer_name = 'conv2'
     with tf.variable_scope(layer_name):
         conv2_out = conv_layer(pool1_out, [1, 4, 64, 64], layer_name)
+
+    # The output for conv2 should be the same h = 1  w = (imsize[1]*0.5 - 1)
+
     # Second pooling layer
     with tf.name_scope('pool2'):
         pool2_out = tf.nn.max_pool(conv2_out, ksize=[1, 2, 2, 1],
                                    strides=[1, 2, 2, 1], padding='SAME',
                                    name='pool2')
 
+    # The output for pool2 should be the same h = 1  w = ceil((imsize[1]*0.5 - 1) * 0.5)
+
     # CONV 3
     layer_name = 'conv3'
     with tf.variable_scope(layer_name):
         conv3_out = conv_layer(pool2_out, [1, 3, 64, lastConFilters], layer_name)
+    #The output in conv3 should be the same output of pool2
+
     # Second pooling layer
     with tf.name_scope('pool3'):
         pool3_out = tf.nn.max_pool(conv3_out, ksize=[1, 2, 2, 1],
                                    strides=[1, 2, 2, 1], padding='SAME',
                                    name='pool3')
 
-    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOutY * lastConvOutY * lastConFilters], name='pool3_flat')
+    # The output for pool3  h = 1  w = ceil( ceil((imsize[1]*0.5 - 1) * 0.5) * 0.5)
+
+    lastConvOutX = 1
+    lastConvOutY = np.ceil( np.ceil((imsize[1] * 0.5 - 1) * 0.5) * 0.5)
+
+    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOutX * lastConvOutY * lastConFilters], name='pool3_flat')
 
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool3_out_flat, [lastConvOutY * lastConvOutY * lastConFilters, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool3_out_flat, [lastConvOutX * lastConvOutY * lastConFilters, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 

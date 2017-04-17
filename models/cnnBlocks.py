@@ -2,7 +2,7 @@ import tensorflow as tf
 import numpy as np
 
 # Model blocks
-def conv_layer(input_tensor, kernel_shape, layer_name, summary=False):
+def conv_layer(input_tensor, kernel_shape, layer_name, summary=False,pad='SAME'):
     # input_tensor b01c
     # kernel_shape 01-in-out
     weights = tf.get_variable("weights", kernel_shape,
@@ -17,7 +17,7 @@ def conv_layer(input_tensor, kernel_shape, layer_name, summary=False):
     # Other options are to use He et. al init. for weights and 0.01
     # to init. biases.
     conv = tf.nn.conv2d(input_tensor, weights,
-                        strides=[1, 1, 1, 1], padding='SAME')
+                        strides=[1, 1, 1, 1], padding=pad)
     return tf.nn.relu(conv + biases)
 
 
