@@ -14,7 +14,7 @@ import sklearn as sk
 
 def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_rate,outModelFolder,summary,epochs = 10):
     outString = []
-
+    outString.append("Using ALTERNATIVE ")
     outString.append("Using datafolder  "+str(dataFolder))
     outString.append("Using testSplit  " + str(testSplit))
     outString.append("Using valSplit  " + str(valSplit))
@@ -38,42 +38,6 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     outString.append("Class distribution  " + str(dataset.classDistribution()))
 
 
-
-
-    """
-    Architecture summary (this is the original architecture. The one in this file is a little different)
-
-    1x32x32-64C3-64P2-64C4-
-    64P2-128C3-128P2-512N-6N in CNN.
-
-    Input image 32x32
-
-    Conv 1 filter size 3x3 with 64 features -- pooling (max??? doesnt say) 2x2
-
-    Conv 2 filter size 4x4 with 64 features -- pooling (max??? doesnt say) 2x2
-
-    Conv 3 filter size 3x3 with 128 features -- pooling (max??? doesnt say) 2x2
-
-    ---Flatten conv 3 to use as input for FC layer (fully connected)
-
-    Fc 512 hiden units
-
-    Output layer FC 6 units (6 units for 6 different classes)
-
-    The FC layers have relu. The Fc layers have dropout.
-    Mini batch 50 - learning rate  0.01.
-
-    Changes in this file
-
-    -The input is 96x96
-    -Using max pooling and relu in conv layers
-    -Softmax in output layer (in the paper doesnt mention or is vague)
-    -Learning rate is dinamic (fixed in the paper) using adam with lr 0.0001 initial
-    -Batches is a parameter but i used 5 for the test
-    -The classes are 2-3 for the moment (6 in the paper)
-
-    """
-
     # Model parameters
     #input 50 batch, 96x96 images and 1 channel , shape=[None, 96,96,1]
     model_input = tf.placeholder(tf.float32, name='model_input')
@@ -81,77 +45,33 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     target = tf.placeholder(tf.float32, name='target')
 
 
-    """
-    Cambios los filtros iniciales tienen tamno del 75
-    Los de ahi en adelante son vectores
-    """
 
     #------------------------------------------MODEL LAYERS
-    hiddenUnits = 512
-    convLayers = 3
+    hiddenUnits = 10
+    convLayers = 1
     imsize = dataset.getDataShape()
-    #lastConvOutX = int(imsize[0] * (0.5 ** convLayers)) #CHECK lastConvOut down
-    #lastConvOutY = int(imsize[1] * (0.5 ** convLayers))
-    lastConFilters = 128
-
-
-    #Real formula with VALID out_height = ceil(float(in_height - filter_height + 1) / float(strides1))
-    #formula for SAME out_height = ceil(float(in_height) / float(strides1))
 
 
     # CONV 1
     layer_name = 'conv1'
     with tf.variable_scope(layer_name):
-        conv1_out = conv_layer(model_input, [imsize[0], 3, 1, 64], layer_name,pad='VALID')
-
-    #The output for conv1 h = (imsize[0] - imsize[0] + 1) /1   w = (imsize[1] - 3 + 1) /1
-
-
+        conv1_out = conv_layer(model_input, [imsize[0], 3, 1, 16], layer_name,pad='VALID')
     # First pooling layer
     with tf.name_scope('pool1'):
         pool1_out = tf.nn.max_pool(conv1_out, ksize=[1, 2, 2, 1],
                                    strides=[1, 2, 2, 1], padding='SAME',
                                    name='pool1')
-    # The output for pool1 h = 1   h = (imsize[1]*0.5 - 1)
-
-    # CONV 2
-    layer_name = 'conv2'
-    with tf.variable_scope(layer_name):
-        conv2_out = conv_layer(pool1_out, [1, 4, 64, 64], layer_name)
-
-    # The output for conv2 should be the same h = 1  w = (imsize[1]*0.5 - 1)
-
-    # Second pooling layer
-    with tf.name_scope('pool2'):
-        pool2_out = tf.nn.max_pool(conv2_out, ksize=[1, 2, 2, 1],
-                                   strides=[1, 2, 2, 1], padding='SAME',
-                                   name='pool2')
-
-    # The output for pool2 should be the same h = 1  w = ceil((imsize[1]*0.5 - 1) * 0.5)
-
-    # CONV 3
-    layer_name = 'conv3'
-    with tf.variable_scope(layer_name):
-        conv3_out = conv_layer(pool2_out, [1, 3, 64, lastConFilters], layer_name)
-    #The output in conv3 should be the same output of pool2
-
-    # Second pooling layer
-    with tf.name_scope('pool3'):
-        pool3_out = tf.nn.max_pool(conv3_out, ksize=[1, 2, 2, 1],
-                                   strides=[1, 2, 2, 1], padding='SAME',
-                                   name='pool3')
-
-    # The output for pool3  h = 1  w = ceil( ceil((imsize[1]*0.5 - 1) * 0.5) * 0.5)
-
+    #HERE I ASSUME POOLING [1, 2, 2, 1] padding SAME (so it halves in every conv)
+    # Real formula with VALID out_height = ceil(float(in_height - filter_height + 1) / float(strides1))
     lastConvOutX = 1
-    lastConvOutY = int(np.ceil( np.ceil((imsize[1] * 0.5 - 1) * 0.5) * 0.5))
+    lastConvOutY = int(np.ceil((imsize[1] - 3 + 1) * 0.5))
 
-    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOutX * lastConvOutY * lastConFilters], name='pool3_flat')
 
+    pool1_out_flat = tf.reshape(pool1_out, [-1, lastConvOutX * lastConvOutY * 16], name='pool1_flat')
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool3_out_flat, [lastConvOutX * lastConvOutY * lastConFilters, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool1_out_flat, [lastConvOutX * lastConvOutY * 16, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
@@ -195,15 +115,15 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     if summary:
         merged = tf.merge_all_summaries()
 
-    train_writer = tf.summary.FileWriter(SUMMARIES_DIR + '/train',
-                                          sess.graph)
     if summary:
-
+        train_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/train',
+                                              sess.graph)
         validation_writer = tf.train.SummaryWriter(SUMMARIES_DIR + '/validation')
     sess.run(tf.initialize_all_variables())
 
 
     #--START TRAIN
+
 
     trainLoss = []
     valLoss = []
@@ -242,13 +162,12 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
             outString.append("Validation accuracy " + str(validation_accuracy) )
             print "Validation loss %f" % (lossVal)
             outString.append("Validation lossVal " + str(lossVal) )
+            outString.append("Time elapsed" + str(time.time() - t_i ) + " seconds")
             print "Time elapsed", (time.time() - t_i) / 60.0, "minutes"
-            outString.append("Time elapsed" + str(time.time() - t_i) + " seconds")
 
             trainLoss.append(loss)
             valLoss.append(lossVal)
             valAc.append(validation_accuracy)
-
 
             if validation_accuracy == 1.0:
                 print "Validation accuracy 1.0 ?!"
@@ -278,14 +197,14 @@ if __name__ == "__main__":
 
     dataFolder = "data/mix"
     batchsize = 50
-    SUMMARIES_DIR = 'summaries/MFPTFFT32'
+    SUMMARIES_DIR = 'summaries/MFPT96'
     learning_rate = 1e-4
-    outModelFolder = 'savedModels/MFPTFFT32'
+    outModelFolder = 'savedModels/MFPT96'
 
     summary = False
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed,trainTime,trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=20)
+    l,y1,y2,seed,runTime, trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary)
     print "\n".join(l)
     # ---------------------Parameters---------------------
