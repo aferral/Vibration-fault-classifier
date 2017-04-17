@@ -144,7 +144,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     # The output for pool3  h = 1  w = ceil( ceil((imsize[1]*0.5 - 1) * 0.5) * 0.5)
 
     lastConvOutX = 1
-    lastConvOutY = np.ceil( np.ceil((imsize[1] * 0.5 - 1) * 0.5) * 0.5)
+    lastConvOutY = int(np.ceil( np.ceil((imsize[1] * 0.5 - 1) * 0.5) * 0.5))
 
     pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOutX * lastConvOutY * lastConFilters], name='pool3_flat')
 
