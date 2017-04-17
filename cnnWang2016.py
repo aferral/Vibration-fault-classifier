@@ -85,8 +85,9 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     #------------------------------------------MODEL LAYERS
     hiddenUnits = 512
     convLayers = 3
-    imsize = dataset.imageSize
-    lastConvOut = int(imsize * (0.5 ** convLayers))
+    imsize = dataset.getDataShape()
+    lastConvOutX = int(imsize[0] * (0.5 ** convLayers))
+    lastConvOutY = int(imsize[1] * (0.5 ** convLayers))
     lastConFilters = 128
 
 
@@ -119,12 +120,12 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                                    strides=[1, 2, 2, 1], padding='SAME',
                                    name='pool3')
 
-    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOut * lastConvOut * lastConFilters], name='pool3_flat')
+    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOutX * lastConvOutY * lastConFilters], name='pool3_flat')
 
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool3_out_flat, [lastConvOut * lastConvOut * lastConFilters, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool3_out_flat, [lastConvOutX * lastConvOutY * lastConFilters, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
@@ -183,7 +184,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
     outString.append("Epochs to train  " + str(epochs))
     t_i = time.time()
-    n_batches = dataset.n_batches
+    n_batches = dataset.getNumberOfBatches()
 
     while dataset.getEpoch() < epochs:
         epoch = dataset.getEpoch()

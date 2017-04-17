@@ -49,8 +49,9 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     #------------------------------------------MODEL LAYERS
     hiddenUnits = 10
     convLayers = 1
-    imsize = dataset.imageSize
-    lastConvOut = int(imsize * (0.5 ** convLayers))
+    imsize = dataset.getDataShape()
+    lastConvOutX = int(imsize[0] * (0.5 ** convLayers))
+    lastConvOutY = int(imsize[1] * (0.5 ** convLayers))
 
     # CONV 1
     layer_name = 'conv1'
@@ -63,11 +64,11 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                                    name='pool1')
     #HERE I ASSUME POOLING [1, 2, 2, 1] padding SAME (so it halves in every conv)
 
-    pool1_out_flat = tf.reshape(pool1_out, [-1, lastConvOut * lastConvOut * 16], name='pool1_flat')
+    pool1_out_flat = tf.reshape(pool1_out, [-1, lastConvOutX * lastConvOutY * 16], name='pool1_flat')
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool1_out_flat, [lastConvOut * lastConvOut * 16, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool1_out_flat, [lastConvOutX * lastConvOutY * 16, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
@@ -127,7 +128,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
     outString.append("Epochs to train  " + str(epochs))
     t_i = time.time()
-    n_batches = dataset.n_batches
+    n_batches = dataset.getNumberOfBatches()
 
     while dataset.getEpoch() < epochs:
         epoch = dataset.getEpoch()

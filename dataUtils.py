@@ -98,7 +98,7 @@ def showMeanstd(dataset):
     # Show mean image of train per class
     # NOTE THIS IMAGE IS NOT THE MEAN IMAGE IN DATASET. This mean image is calculated with normalized images
     # THe original mean image was calculated with the original images in train set.
-    imsize = dataset.imageSize
+    imsize = dataset.getDataShape()
 
 
     flattenDataset, flatTest, fTrainLabels, fTestLabels = \
@@ -108,7 +108,7 @@ def showMeanstd(dataset):
     fig, grid = plt.subplots(1, nClases)
     for c in range(nClases):
         elements = np.where(fTrainLabels == c)
-        classMean = np.mean(flattenDataset[elements, :], axis=1).reshape((imsize, imsize))
+        classMean = np.mean(flattenDataset[elements, :], axis=1).reshape(imsize)
         grid[c].set_title('mean class ' + str(c))
         grid[c].imshow(classMean)
         grid[c].set_adjustable('box-forced')
@@ -129,7 +129,7 @@ def showMeanstd(dataset):
     fig, grid = plt.subplots(1, nClases)
     for c in range(nClases):
         elements = np.where(fTrainLabels == c)
-        classMean = np.std(flattenDataset[elements, :], axis=1).reshape((imsize, imsize))
+        classMean = np.std(flattenDataset[elements, :], axis=1).reshape(imsize)
         grid[c].set_title('Std class ' + str(c))
         grid[c].imshow(classMean)
         grid[c].set_adjustable('box-forced')
