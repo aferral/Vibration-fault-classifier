@@ -124,12 +124,12 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
                                    strides=[1, 2, 2, 1], padding='SAME',
                                    name='pool3')
 
-    pool3_out_flat = tf.reshape(pool3_out, [-1, 1 * lastConvOutY * lastConFilters], name='pool3_flat')
+    pool3_out_flat = tf.reshape(pool3_out, [-1, lastConvOutY * lastConvOutY * lastConFilters], name='pool3_flat')
 
     # Output layer  conv3 to  fc 1
     layer_name = 'fc1'
     with tf.variable_scope(layer_name):
-        fc1_out = fc_layer(pool3_out_flat, [1 * lastConvOutY * lastConFilters, hiddenUnits], layer_name)
+        fc1_out = fc_layer(pool3_out_flat, [lastConvOutY * lastConvOutY * lastConFilters, hiddenUnits], layer_name)
 
     fc1_out_drop = tf.nn.dropout(fc1_out, keep_prob)
 
@@ -255,7 +255,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 if __name__ == "__main__":
     # ---------------------Parameters---------------------
 
-    dataFolder = "data/MFPTFFT32"
+    dataFolder = "data/mix"
     batchsize = 50
     SUMMARIES_DIR = 'summaries/MFPTFFT32'
     learning_rate = 1e-4
