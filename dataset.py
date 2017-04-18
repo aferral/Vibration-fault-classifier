@@ -133,7 +133,7 @@ class Dataset:
         ''' Returns a tuple with batch and batch index '''
         start_idx = self.current_batch * self.batch_size
         end_idx = start_idx + self.batch_size
-        batch_data = self.train_data[start_idx:end_idx].reshape((self.batch_size,self.imageSize,self.imageSize,1))
+        batch_data = self.train_data[start_idx:end_idx].reshape((self.batch_size,self.dataShape[0],self.dataShape[1],1))
         batch_labels = self.train_labels[start_idx:end_idx]
         batch_idx = self.current_batch
 
@@ -155,12 +155,12 @@ class Dataset:
                 start_idx = i * self.batch_size
                 end_idx = start_idx + self.batch_size
                 nElem = min(self.batch_size,data.shape[0])
-                batch_data = data[start_idx:end_idx].reshape((nElem,self.imageSize,self.imageSize,1))
+                batch_data = data[start_idx:end_idx].reshape((nElem,self.dataShape[0],self.dataShape[1],1))
                 batch_labels = labels[start_idx:end_idx]
                 batches.append((batch_data, batch_labels))
             return batches
         else:
-            return (data.reshape((data.shape[0],self.imageSize,self.imageSize,1)), labels)
+            return (data.reshape((data.shape[0],self.dataShape[0],self.dataShape[1],1)), labels)
 
     def getValidationSet(self, asBatches=False):
         return self.getSample(self.validation_data,self.validation_labels,asBatches)
