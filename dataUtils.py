@@ -29,9 +29,9 @@ def flatInput(train_data,train_labels,test_data,test_labels):
     return flattenDataset, flatTest, fTrainLabels, fTestLabels
 
 def inverseNorm(image,dataset):
-    imsize = dataset.imageSize
+    imsize = dataset.getDataShape()
 
-    im = image.reshape((imsize,imsize))
+    im = image.reshape(imsize)
     return (im * dataset.std) + dataset.mean
 
 def pca2Visua(pca,data,labels,nClases):
@@ -100,7 +100,6 @@ def showMeanstd(dataset):
     # THe original mean image was calculated with the original images in train set.
     imsize = dataset.getDataShape()
 
-
     flattenDataset, flatTest, fTrainLabels, fTestLabels = \
         flatInput(dataset.train_data, dataset.train_labels, dataset.test_data, dataset.test_labels)
 
@@ -168,7 +167,7 @@ def processPca(flattenDataset, flatTest, fTrainLabels, fTestLabels):
     dataPcaTrainy = fTrainLabels
 
     dataPcaTestX = pca.transform(flatTest)
-    dataPcaTesty = fTestLabels 
+    dataPcaTesty = fTestLabels
     return dataPcaTrainX, dataPcaTestX, dataPcaTrainy, dataPcaTesty
 
 
