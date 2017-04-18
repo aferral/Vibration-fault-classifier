@@ -27,7 +27,7 @@ for data in datasets:
         alt = int(i)
 
         now = time.strftime('-day%Y-%m-%d-time%H-%M')
-        nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 20, "valSplit" : 0.1}
+        nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 20, "valSplit" : 0.3}
 
         dname = nb_kwargs['dataFolder'].split("/")[1]
         alt2 = str(nb_kwargs['alternativeArc'])
