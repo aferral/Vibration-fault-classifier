@@ -275,7 +275,8 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
 if __name__ == "__main__":
     # ---------------------Parameters---------------------
-
+    import os
+    print "CWD ",os.getcwd()
     dataFolder = "data/CWRfeatures croped"
     batchsize = 50
     SUMMARIES_DIR = 'summaries/MFPTFFT32'
