@@ -168,7 +168,7 @@ def processPca(flattenDataset, flatTest, fTrainLabels, fTestLabels):
     dataPcaTrainy = fTrainLabels
 
     dataPcaTestX = pca.transform(flatTest)
-    dataPcaTesty = fTestLabels
+    dataPcaTesty = fTestLabels 
     return dataPcaTrainX, dataPcaTestX, dataPcaTrainy, dataPcaTesty
 
 
