@@ -6,7 +6,7 @@ from cnnBlocks import conv_layer, fc_layer, test, validate, getPredandLabels
 import matplotlib.pyplot as plt
 import tensorflow as tf
 #basado en https://github.com/ignacioreyes/convnet-tutorial/blob/master/convnet-tutorial.ipynb
-from dataset import Dataset
+from dataset import Dataset, DatasetMat
 import sklearn as sk
 
 
@@ -32,7 +32,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     import random
     seed = 100 * random.random()
 
-    dataset = Dataset(dataFolder,batch_size=batchsize,seed=int(seed),testProp=testSplit,validation_proportion=valSplit)
+    dataset = DatasetMat(dataFolder,batch_size=batchsize,seed=int(seed),testProp=testSplit,validation_proportion=valSplit)
 
     outString.append("Using dataset seed  " + str(seed))
     outString.append("Class distribution  " + str(dataset.classDistribution()))
@@ -275,7 +275,6 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 def main():
     # ---------------------Parameters---------------------
     import os
-    print "CWD ", os.getcwd()
     dataFolder = "data/CWRfeatures croped"
     batchsize = 50
     SUMMARIES_DIR = 'summaries/MFPTFFT32'

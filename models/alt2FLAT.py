@@ -33,7 +33,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
     import random
     seed = 100 * random.random()
 
-    dataset = Dataset(dataFolder,batch_size=batchsize,seed=int(seed),testProp=testSplit,validation_proportion=valSplit)
+    dataset = DatasetMat(dataFolder,batch_size=batchsize,seed=int(seed),testProp=testSplit,validation_proportion=valSplit)
 
     outString.append("Using dataset seed  " + str(seed))
     outString.append("Class distribution  " + str(dataset.classDistribution()))
