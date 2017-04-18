@@ -14,6 +14,7 @@ def labels_to_one_hot(labels,n):
     ''' Converts list of integers to numpy 2D array with one-hot encoding'''
     N = len(labels)
     one_hot_labels = np.zeros([N, n], dtype=int)
+    print labels
     one_hot_labels[np.arange(N), labels] = 1
     return one_hot_labels
 
