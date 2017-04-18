@@ -22,7 +22,7 @@ datasets = ['CWRfeatures croped']
 modelsToRun = [3,4,5]   #FLAT models
 
 for data in datasets:
-    for i in range(3):
+    for i in modelsToRun:
         dFolder = os.path.join('data',data)
         alt = int(i)
 

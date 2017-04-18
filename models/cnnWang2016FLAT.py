@@ -276,7 +276,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 if __name__ == "__main__":
     # ---------------------Parameters---------------------
 
-    dataFolder = "data/mix"
+    dataFolder = "data/CWRfeatures croped"
     batchsize = 50
     SUMMARIES_DIR = 'summaries/MFPTFFT32'
     learning_rate = 1e-4
