@@ -11,7 +11,7 @@ from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import classification_report
 from sklearn.metrics import accuracy_score
 
-from dataset import Dataset
+from dataset import Dataset, DatasetMat
 
 
 def flatInput(train_data,train_labels,test_data,test_labels):
@@ -215,18 +215,21 @@ def useSVM(X, y, tX, ty, returnVal=False):
     else:
         return accuracy_score(ty, pred)
 
-def getNewDataset(datasetFolder,seed=None):
+def getNewDataset(datasetFolder,seed=None,matDataset=False):
     if seed is None:
         seed = int(100 * random.random())
     #Changing the seed will give a new train-val-test split
-    dataset = Dataset(datasetFolder, batch_size=20,seed=seed)
+    if not matDataset:
+        dataset = Dataset(datasetFolder, batch_size=20,seed=seed)
+    else:
+        dataset = DatasetMat(datasetFolder, batch_size=20, seed=seed)
     flattenDataset, flatTest, fTrainLabels, fTestLabels = flatInput(dataset.train_data, dataset.train_labels, dataset.test_data, dataset.test_labels)
     return flattenDataset, flatTest, fTrainLabels, fTestLabels, dataset
 
 
 
 
-def simplemethodsresults(datasetFolder,transform,limitPoints=None):
+def simplemethodsresults(datasetFolder,transform,limitPoints=None,isMat=False):
     xTimes = 3
     resultMLP = []
     resultLinear = []
@@ -235,7 +238,7 @@ def simplemethodsresults(datasetFolder,transform,limitPoints=None):
 
     # FOR the 3 alg repeat 10 times
     for i in range(xTimes):
-        flattenDataset, flatTest, fTrainLabels, fTestLabels, _ = getNewDataset(datasetFolder)
+        flattenDataset, flatTest, fTrainLabels, fTestLabels, _ = getNewDataset(datasetFolder,matDataset=isMat)
         if limitPoints is None:
             X, tX, y, ty = transform(flattenDataset, flatTest, fTrainLabels, fTestLabels)
         else:
