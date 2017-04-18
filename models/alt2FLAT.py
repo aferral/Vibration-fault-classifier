@@ -7,7 +7,7 @@ from cnnBlocks import conv_layer, fc_layer, test, validate, getPredandLabels
 import matplotlib.pyplot as plt
 import tensorflow as tf
 #basado en https://github.com/ignacioreyes/convnet-tutorial/blob/master/convnet-tutorial.ipynb
-from dataset import Dataset
+from dataset import Dataset, DatasetMat
 import sklearn as sk
 
 
