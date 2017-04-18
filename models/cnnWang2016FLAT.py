@@ -272,11 +272,10 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
 
 
-
-if __name__ == "__main__":
+def main():
     # ---------------------Parameters---------------------
     import os
-    print "CWD ",os.getcwd()
+    print "CWD ", os.getcwd()
     dataFolder = "data/CWRfeatures croped"
     batchsize = 50
     SUMMARIES_DIR = 'summaries/MFPTFFT32'
@@ -287,6 +286,11 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed,trainTime,trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=20)
+    l, y1, y2, seed, trainTime, trainLoss, valLoss, valAc = runSession(dataFolder, 0.3, 0.3, batchsize, SUMMARIES_DIR,
+                                                                       learning_rate, outModelFolder, summary,
+                                                                       epochs=20)
     print "\n".join(l)
     # ---------------------Parameters---------------------
+if __name__ == "__main__":
+    main()
+
