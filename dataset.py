@@ -200,6 +200,7 @@ class DatasetMat(Dataset):
                     fileName = f.split('.')[-2] #Extract the .mat from the filename
                     matrixData = sio.loadmat(matpath)[fileName] #The .mat is a dictionary and the fileName is the key for the data
                     self.imageSize = matrixData.shape[0]
+                    self.dataShape = matrixData.shape
                     all.append(matrixData)
                     allL.append(label)
                     self.fileNames.append(f)
