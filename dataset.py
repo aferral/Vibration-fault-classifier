@@ -182,6 +182,10 @@ class DatasetMat(Dataset):
 
         #for each subfolder a new label (just read folder)
         allFolders = filter(lambda x : os.path.isdir(os.path.join(dataFolder,x)), os.listdir(dataFolder))
+        if len(allFolders) == 0:
+            print "ERROR NOT FOUND FOLDERS ",dataFolder
+            print os.getcwd()
+            raise Exception('NOT FOUND FOLDERs')
         now = time.strftime('Day%Y-%m-%d-Time%H-%M')
         log = "\n\n Dataset label log "+str(dataFolder)+str(now)+" \n"
 
