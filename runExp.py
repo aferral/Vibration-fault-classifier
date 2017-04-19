@@ -15,7 +15,7 @@ if not os.path.exists(outReport):
 #            "CW32Scalograms", "CW32Spectrograms", "CW96Scalograms", "CW96Spectrograms",
 #            "CWRHHT32", "CWRHHT96", "MFPT_HHT_32", "MFPT_HHT_96"
 #            ]
-datasets = ['CWRfeatures croped']
+datasets = ['CWRfeatures stride8']
 
 #IMPORTANTE NOTE TO RUN THE FLAT MODELS USE 3 4 5 (3 for old archFlat, 4 for simpleArchFLAT, 5 for bestArchFlat)
 #modelsToRun = [0,1,2]  #Normal models
