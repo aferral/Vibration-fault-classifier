@@ -221,4 +221,4 @@ class DatasetMat(Dataset):
 
 if __name__ == '__main__':
     #cifar10 = Dataset("data/mix",batch_size=20,seed=1)
-    cifar10 = DatasetMat("data/CWRfeatures croped",batch_size=20,seed=1)
+    cifar10 = DatasetMat("data/CWRfeatures stride8",batch_size=20,seed=1)

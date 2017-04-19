@@ -39,12 +39,14 @@ for label,folder in enumerate(allFolders):
 				assert(trozo.shape == (dataHeight,timeStep))
 
 				#Ahora guardar archivo
-				dataDict[fileName] = trozo
-
 				if not os.path.exists(os.path.join(outFolder,folder)):
 					os.makedirs(os.path.join(outFolder,folder))
-				outName = fileName+"S"+str(i)+'.mat'
-				sio.savemat(os.path.join(outFolder,folder,outName),dataDict)
+				outDict = {}
+
+				outNamepre = fileName+"S"+str(i)
+				outName = outNamepre+'.mat'
+				outDict[outNamepre] = trozo
+				sio.savemat(os.path.join(outFolder,folder,outName),outDict)
 				i+=1
 	#Recordar logear archivo para saber que stride time step use, archvo
 	outDescName = 'descriptionStride'+str(now)+'.txt'
