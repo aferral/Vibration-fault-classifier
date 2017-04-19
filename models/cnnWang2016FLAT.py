@@ -275,7 +275,7 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 def main():
     # ---------------------Parameters---------------------
     import os
-    dataFolder = "data/CWRfeatures croped"
+    dataFolder = "data/CWRfeatures stride8"
     batchsize = 50
     SUMMARIES_DIR = 'summaries/MFPTFFT32'
     learning_rate = 1e-4
