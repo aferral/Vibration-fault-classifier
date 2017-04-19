@@ -15,7 +15,7 @@ if not os.path.exists(outReport):
 #            "CW32Scalograms", "CW32Spectrograms", "CW96Scalograms", "CW96Spectrograms",
 #            "CWRHHT32", "CWRHHT96", "MFPT_HHT_32", "MFPT_HHT_96"
 #            ]
-datasets = ['MFPTfeatures stride8']
+datasets = ['MFPTfeatures stride8','MFPTfeatures stride15']
 
 #IMPORTANTE NOTE TO RUN THE FLAT MODELS USE 3 4 5 (3 for old archFlat, 4 for simpleArchFLAT, 5 for bestArchFlat)
 #modelsToRun = [0,1,2]  #Normal models
@@ -27,7 +27,7 @@ for data in datasets:
         alt = int(i)
 
         now = time.strftime('-day%Y-%m-%d-time%H-%M')
-        nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 20, "valSplit" : 0.3}
+        nb_kwargs = {'dataFolder': dFolder, 'alternativeArc': alt, 'timeNow': now, 'epochs' : 30, "valSplit" : 0.3}
 
         dname = nb_kwargs['dataFolder'].split("/")[1]
         alt2 = str(nb_kwargs['alternativeArc'])
