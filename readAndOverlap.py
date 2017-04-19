@@ -3,14 +3,14 @@ import os
 import time
 
 dataFolder = "data/CWRfeatures"
-outFolder = "data/CWRfeatures stride8"
+outFolder = "data/CWRfeatures stride15"
 
 if not os.path.exists(outFolder):
     os.makedirs(outFolder)
 
 dataHeight = 75
 timeStep = 15
-stride= 8
+stride= 15
 
 
 
