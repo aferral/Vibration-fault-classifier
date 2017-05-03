@@ -6,6 +6,7 @@ from cnnBlocks import conv_layer, fc_layer, test, validate, getPredandLabels
 import matplotlib.pyplot as plt
 import tensorflow as tf
 #basado en https://github.com/ignacioreyes/convnet-tutorial/blob/master/convnet-tutorial.ipynb
+from dataUtils import count_number_trainable_params
 from dataset import Dataset
 import sklearn as sk
 
@@ -263,4 +264,5 @@ if __name__ == "__main__":
     # name_0, name_1 ,name_2 etc )
     l,y1,y2,seed,trainTime,trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=20)
     print "\n".join(l)
+    count_number_trainable_params(tf)
     # ---------------------Parameters---------------------
