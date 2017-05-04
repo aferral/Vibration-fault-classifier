@@ -264,5 +264,6 @@ if __name__ == "__main__":
     # name_0, name_1 ,name_2 etc )
     l,y1,y2,seed,trainTime,trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=20)
     print "\n".join(l)
-    count_number_trainable_params(tf)
+    print " "
+    print "The averague train time for epoch is ",np.mean(trainTime)," std ",np.std(trainTime)
     # ---------------------Parameters---------------------
