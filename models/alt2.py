@@ -261,10 +261,10 @@ def runSession(dataFolder,testSplit,valSplit,batchsize,SUMMARIES_DIR,learning_ra
 
             if validation_accuracy == 1.0:
                 print "Validation accuracy 1.0 ?!"
-                # break
+                #break
         if fallas == 3 :
             print "3 epochs with higher val error EARLY STOP"
-            #break
+            break
 
     #--END TRAINING test accuracy
     trainTime = time.time() - t_i
@@ -298,9 +298,15 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed,runTime, trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=20)
+    todo = 10
+    resTime = []
+
+
+    for i in range(todo):
+        l,y1,y2,seed,runTime, trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=20)
+        resTime.append( (runTime*1.0/20) )
 
     print "\n".join(l)
     print " "
-    print "The averague train time for epoch is ", np.mean(runTime), " std ", np.std(runTime)
+    print "The averague train time for epoch is ", np.mean(np.array(resTime)), " std ", np.std(np.array(resTime))
     # ---------------------Parameters---------------------
