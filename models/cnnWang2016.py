@@ -262,8 +262,13 @@ if __name__ == "__main__":
 
     # Note the number of classes will be automatically detected from the dataset (it will check the set of image names
     # name_0, name_1 ,name_2 etc )
-    l,y1,y2,seed,trainTime,trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=20)
+    todo = 10
+    resTime = []
+
+    for i in range(todo):
+        l,y1,y2,seed,trainTime,trainLoss, valLoss, valAc = runSession(dataFolder,0.3,0.3, batchsize, SUMMARIES_DIR, learning_rate, outModelFolder,summary,epochs=20)
+        resTime.append((trainTime * 1.0 / 20))
     print "\n".join(l)
     print " "
-    print "The averague train time for epoch is ",np.mean(trainTime)," std ",np.std(trainTime)
+    print "The averague train time for epoch is ", np.mean(np.array(resTime)), " std ", np.std(np.array(resTime))
     # ---------------------Parameters---------------------
