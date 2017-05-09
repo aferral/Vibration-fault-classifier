@@ -29,7 +29,7 @@ with tf.Session() as sess:
 
 
     for i in range(testCases):
-        imageToUse = np.random.rand(96,96,1)
+        imageToUse = np.random.rand(1,96,96,1)
         st = time.time()
         v_ = sess.run((outfc2), feed_dict={md: imageToUse, kp: 1.0})
         res.append(time.time()-st)
