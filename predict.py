@@ -34,3 +34,4 @@ with tf.Session() as sess:
         v_ = sess.run((outfc2), feed_dict={md: imageToUse, kp: 1.0})
         res.append(time.time()-st)
     print "Time resuls mean ",np.mean(res)," std ",np.std(res)
+    print res
